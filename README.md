@@ -48,14 +48,14 @@ in case something goes wrong the output will be
     - expected: `Partner 0`
     - received: `Partner 11`
 
-**Field remove**
+
+**Field removed**
 
     AssertionError: View `<class 'path.to.module.CustomerListAPIView'>` breaks the contract.
     Field `id` is missing in the new response
 
 
 **Field added**
-
 
     AssertionError: View `<class 'path.to.module.CustomerListAPIView'>` returned more field than expected.
     Action needed api_customers.response.json need rebuild.

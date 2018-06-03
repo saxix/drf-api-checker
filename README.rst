@@ -29,11 +29,11 @@ Contract violations can happen when:
 How it works:
 -------------
 
-    The First time the test is ran, the response and model instances are serialized and
-    saved on the disk; any further execution is checked against this first response.
-    Model instances are saved as well,  to guarantee the same response's content.
+The First time the test is ran, the response and model instances are serialized and
+saved on the disk; any further execution is checked against this first response.
+Model instances are saved as well,  to guarantee the same response's content.
 
-Test data are saved in the same directory where the module test  lives, under `_api_checker/<module_fqn>/<test_class>`
+Test data are saved in the same directory where the module test lives, under `_api_checker/<module_fqn>/<test_class>`
 
 Fields that cannot be checked by value can be tested writing custom `assert_<field_name>` methods.
 (see AssertModifiedMixin)
@@ -61,6 +61,7 @@ in case something goes wrong the output will be
     ::
 
     AssertionError: View `<class 'path.to.module.CustomerListAPIView'>` breaks the contract.
+
     Field `id` is missing in the new response
 
 
@@ -70,7 +71,9 @@ in case something goes wrong the output will be
     ::
 
     AssertionError: View `<class 'path.to.module.CustomerListAPIView'>` returned more field than expected.
+
     Action needed api_customers.response.json need rebuild.
+
     New fields are:
     `['country']`
 
@@ -78,8 +81,32 @@ in case something goes wrong the output will be
 How To use it:
 --------------
 
-- add ApiCheckerMixin to your Test base classes
-- use ApiCheckerBase as your Test metaclass
+unittest
+~~~~~~~~
+
+Using ApiCheckerMixin::
+
+    class TestAPIAgreements(ApiCheckerMixin, TestCase):
+        def get_fixtures(self):
+            return {'customer': CustomerFactory()}
+
+        def test_customer_detail(self):
+            url = reverse("customer-detail", args=[self.get_fixture('customer').pk])
+            self.assertAPI(url)
+
+
+Using ApiCheckerBase metaclass::
+
+   class TestAPIIntervention(TestCase, metaclass=ApiCheckerBase):
+        URLS = [
+                reverse("intervention-list"),
+                reverse("intervention-detail", args=[101]),
+               ]
+
+        def get_fixtures(cls):
+            return {'intervention': InterventionFactory(id=101),
+               'result': ResultFactory(),
+               }
 
 ApiCheckerBase can produce API test with minimum effort but it is offers less flexibility
 than the use of ApiCheckerMixin.

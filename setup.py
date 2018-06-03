@@ -35,7 +35,7 @@ setup(
     author_email='s.apostolico@gmail.com',
     license="MIT",
     description='DjangoRestFramework API checker',
-    long_description=open("README.rst").read(),
+    long_description=open("README.md").read(),
     package_dir={'': 'src'},
     packages=find_packages('src'),
     include_package_data=True,

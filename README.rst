@@ -22,8 +22,8 @@ Contract violations can happen when:
 
 - fields are removed from Serializer
 - field representation changes ( ie. date format)
-- Response status code changes
-- Response headers changes
+- Response status code changes (optional)
+- Response headers change (optional)
 
 
 How it works:
@@ -128,8 +128,9 @@ pytest integraation is provided by two helpers `frozenfixture` and `contract`::
 
 
 
+
 Links
-~~~~~
+-----
 
 +--------------------+----------------+--------------+----------------------------+
 | Stable             | |master-build| | |master-cov| |                            |
@@ -144,6 +145,7 @@ Links
 +--------------------+---------------+--------------------------------------------+
 | Documentation:     |https://drf-api-checker.readthedocs.org/en/latest/   |
 +--------------------+---------------+--------------+-----------------------------+
+
 
 .. |master-build| image:: https://secure.travis-ci.org/saxix/drf-api-checker.png?branch=master
                     :target: http://travis-ci.org/saxix/drf-api-checker/

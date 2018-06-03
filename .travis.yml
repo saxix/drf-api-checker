@@ -15,10 +15,10 @@ env:
 
 
 install:
-  - pip install tox "coverage<=4.0" codecov
+  - pip install tox codecov
 
 script:
-  - tox -e "py${TRAVIS_PYTHON_VERSION//.}-d${DJANGO//.}" -- py.test tests -v
+  - tox -e "py${TRAVIS_PYTHON_VERSION//.}-d${DJANGO//.}"
 
 before_success:
   - coverage erase

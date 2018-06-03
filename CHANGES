@@ -1,7 +1,10 @@
 Release 0.2 (dev)
 -----------------
 * improve subclasssing support
-* add support
+* add support for protected url
+* raise error if response code > 299
+*
+
 
 Release 0.1
 -----------

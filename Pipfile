@@ -18,6 +18,7 @@ pytest-echo = "*"
 pyfakefs = "*"
 pdbpp = "*"
 tox = "*"
+check-manifest = "*"
 
 [requires]
 python_version = "3.6"

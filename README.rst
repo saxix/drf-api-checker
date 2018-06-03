@@ -137,14 +137,14 @@ Links
 +--------------------+----------------+--------------+----------------------------+
 | Development        | |dev-build|    | |dev-cov|    |                            |
 +--------------------+----------------+--------------+----------------------------+
-| Project home page: |https://github.com/saxix/drf-api-checker             |
-+--------------------+---------------+--------------------------------------------+
-| Issue tracker:     |https://github.com/saxix/drf-api-checker/issues?sort |
-+--------------------+---------------+--------------------------------------------+
-| Download:          |http://pypi.python.org/pypi/drf-api-checker/         |
-+--------------------+---------------+--------------------------------------------+
-| Documentation:     |https://drf-api-checker.readthedocs.org/en/latest/   |
-+--------------------+---------------+--------------+-----------------------------+
+| Project home page: | https://github.com/saxix/drf-api-checker                   |
++--------------------+------------------------------------------------------------+
+| Issue tracker:     | https://github.com/saxix/drf-api-checker/issues?sort       |
++--------------------+------------------------------------------------------------+
+| Download:          | http://pypi.python.org/pypi/drf-api-checker/               |
++--------------------+------------------------------------------------------------+
+| Documentation:     | https://drf-api-checker.readthedocs.org/en/latest/         |
++--------------------+------------------------------------------------------------+
 
 
 .. |master-build| image:: https://secure.travis-ci.org/saxix/drf-api-checker.png?branch=master

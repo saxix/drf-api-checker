@@ -12,7 +12,8 @@ DRF API Checker
         :target: https://pypi.python.org/pypi/drf-api-checker
 
 
-This module offers some utilities to check DjangoRestFramework API endpoints variation.
+This module offers some utilities to avoid unwanted changes in Django Rest Framework responses,
+so to keep stable contracts
 
 The purpose is to guarantee that any code changes never introduce 'contract violations'
 changing the Serialization behaviour.
@@ -21,7 +22,7 @@ changing the Serialization behaviour.
 Contract violations can happen when:
 
 - fields are removed from Serializer
-- field representation changes ( ie. date format)
+- field representation changes (ie. date/number format, )
 - Response status code changes (optional)
 - Response headers change (optional)
 
@@ -31,13 +32,14 @@ How it works:
 
 The First time the test is ran, the response and model instances are serialized and
 saved on the disk; any further execution is checked against this first response.
-Model instances are saved as well,  to guarantee the same response's content.
 
-Test data are saved in the same directory where the module test lives, under `_api_checker/<module_fqn>/<test_class>`
+Test data are saved in the same directory where the test module lives,
+under `_api_checker/<module_fqn>/<test_class>`
 
-Fields that cannot be checked by value can be tested writing custom `assert_<field_name>` methods.
-(see AssertModifiedMixin)
-In case of nested objects, method must follow the field "path".
+Fields that cannot be checked by value (ie timestamps/last modified) can be tested writing
+custom `assert_<field_name>` methods.
+
+In case of nested objects, method names must follow the field "path".
 (ie. `assert_permission_modified` vs `assert_modified`)
 
 This module can also intercept when a field is added,

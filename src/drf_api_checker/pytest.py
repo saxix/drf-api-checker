@@ -29,7 +29,7 @@ def frozenfixture(func):
     return pytest.fixture(_inner)
 
 
-def contract(recorder=Recorder, allow_empty=False, headers=True, status=True, name=None):
+def contract(recorder_class=Recorder, allow_empty=False, headers=True, status=True, name=None):
     def _inner1(func):
         from drf_api_checker.unittest import BASE_DATADIR
         data_dir = os.path.join(os.path.dirname(inspect.getfile(func)),
@@ -39,7 +39,7 @@ def contract(recorder=Recorder, allow_empty=False, headers=True, status=True, na
         @wraps(func)
         def _inner(*args, **kwargs):
             url = func(*args, **kwargs)
-            recorder = Recorder(data_dir)
+            recorder = recorder_class(data_dir)
             recorder.assertAPI(url, allow_empty, headers, status, name)
             return True
 

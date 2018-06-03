@@ -4,7 +4,7 @@ import os
 from django.test import Client
 from django.urls import resolve
 
-from drf_api_checker.exceptions import FieldAddedError, FieldMissedError, FieldValueError
+from drf_api_checker.exceptions import FieldAddedError, FieldMissedError, FieldValueError, StatusCodeError
 from drf_api_checker.fs import clean_url, get_filename
 from drf_api_checker.utils import _write, load_response, serialize_response
 
@@ -19,13 +19,10 @@ class Recorder:
 
     @property
     def client(self):
-        return Client()
-
-    # def load_expected(self):
-    #     pass
-    #
-    # def get(self, url):
-    #     pass
+        if self.owner:
+            return self.owner.client
+        else:
+            return Client()
 
     def get_response_filename(self, url):
         return get_filename(self.data_dir, clean_url(url) + '.response.json')
@@ -67,7 +64,7 @@ class Recorder:
             raise FieldAddedError(view, ", ".join(added), filename)
         self._compare_dict(response, expected, view=view)
 
-    def assertAPI(self, url, allow_empty=False, check_headers=True, check_status=True, name=None):
+    def assertAPI(self, url, allow_empty=False, check_headers=True, check_status=True, expect_errors=False, name=None):
         """
         check url for response changes
 
@@ -86,6 +83,10 @@ class Recorder:
         payload = response.data
         if not allow_empty and not payload:
             raise ValueError(f"View {view} returned and empty json. Check your test")
+
+        if response.status_code > 299 and not expect_errors:
+            raise ValueError(f"View {view} unexpected response. {response.status_code} - {response.content}")
+
         if not allow_empty and response.status_code == 404:
             raise ValueError(f"View {view} returned 404 status code. Check your test")
 
@@ -93,8 +94,8 @@ class Recorder:
             _write(filename, serialize_response(response))
 
         stored = load_response(filename)
-        if check_status:
-            assert response.status_code == stored.status_code
+        if (check_status) and response.status_code != stored.status_code:
+            raise StatusCodeError(view, response.status_code, stored.status_code)
         if check_headers:
             self._assert_headers(response, stored)
         self.compare(payload, stored.data, filename, view=view)

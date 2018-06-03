@@ -41,3 +41,15 @@ Datadir: {self.filename}
 Field `{self.field_name}` does not match.
 - expected: `{self.expected}`
 - received: `{self.receiced}`"""
+
+
+class StatusCodeError(ContractError):
+    def __init__(self, view, received, expected):
+        self.view = view
+        self.received = received
+        self.expected = expected
+
+    def __str__(self) -> str:
+        return f"View `{self.view}` breaks the contract. Expected status {self.expected}, received {self.received}"
+
+

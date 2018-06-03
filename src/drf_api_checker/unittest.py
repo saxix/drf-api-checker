@@ -31,11 +31,13 @@ class ApiCheckerMixin:
             self.assertAPI(url)
 
     """
+    recorder_class = Recorder
 
     def setUp(self):
         super().setUp()
-        self.client = Client()
+        self.client = self.client_class()
         self._process_fixtures()
+        self.recorder = self.recorder_class(self.data_dir, self)
 
     @classmethod
     def setUpClass(cls):
@@ -43,7 +45,6 @@ class ApiCheckerMixin:
         cls.data_dir = os.path.join(os.path.dirname(inspect.getfile(cls)),
                                     BASE_DATADIR,
                                     cls.__module__, cls.__name__)
-        cls.recorder = Recorder(cls.data_dir, cls)
 
     # def get_response_filename(self, url):
     #     return get_filename(self.data_dir, clean_url(url) + '.response.json')
@@ -109,9 +110,10 @@ test_url__api_v2_interventions_101 (etools.applications.partners.tests.test_api.
 ...
 
     """
+    mixin = ApiCheckerMixin
 
     def __new__(cls, clsname, superclasses, attributedict):
-        superclasses = (ApiCheckerMixin,) + superclasses
+        superclasses = (cls.mixin,) + superclasses
         clazz = type.__new__(cls, clsname, superclasses, attributedict)
 
         def check_url(url):

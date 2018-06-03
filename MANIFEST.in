@@ -1,0 +1,7 @@
+include README
+include CHANGES
+include LICENSE
+include MANIFEST.in
+recursive-include docs *
+recursive-include src/requirements *.pip
+recursive-include src/drf_api_checker *

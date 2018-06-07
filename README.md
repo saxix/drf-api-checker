@@ -80,9 +80,10 @@ Using ApiCheckerMixin::
             self.assertAPI(url)
 
 
-Using ApiCheckerBase metaclass::
+Using ApiCheckerBase metaclass
 
-   class TestAPIIntervention(TestCase, metaclass=ApiCheckerBase):
+
+    class TestAPIIntervention(TestCase, metaclass=ApiCheckerBase):
         URLS = [
                 reverse("intervention-list"),
                 reverse("intervention-detail", args=[101]),

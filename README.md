@@ -94,8 +94,8 @@ Using ApiCheckerBase metaclass
                'result': ResultFactory(),
                }
 
-ApiCheckerBase can produce API test with minimum effort but it is offers less flexibility
-than the use of ApiCheckerMixin.
+ApiCheckerBase can produce API test with minimum effort but it offers less flexibility
+than ApiCheckerMixin.
 
 **pytest**
 

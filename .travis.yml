@@ -20,9 +20,5 @@ install:
 script:
   - tox -e "py${TRAVIS_PYTHON_VERSION//.}-d${DJANGO//.}"
 
-before_success:
-  - coverage erase
-
 after_success:
-  - coverage combine
   - codecov

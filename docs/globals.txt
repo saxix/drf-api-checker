@@ -7,7 +7,6 @@
 .. _protocol: http://en.wikipedia.org/wiki/Optimistic_concurrency_control
 .. _issue_11313: https://code.djangoproject.com/ticket/11313
 
-.. |concurrency| replace:: **django-concurrency**
-.. |pkg| replace:: dja
+.. |pkg| replace:: **drf-api-checker**
 .. |version| replace:: 0.1
 

@@ -19,6 +19,7 @@ pyfakefs = "*"
 pdbpp = "*"
 tox = "*"
 check-manifest = "*"
+sphinx = "*"
 
 [requires]
 python_version = "3.6"

@@ -45,7 +45,6 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.autosummary',
               'sphinx.ext.coverage',
               'sphinx.ext.viewcode',
-              'version',
               'github']
 
 intersphinx_mapping = {

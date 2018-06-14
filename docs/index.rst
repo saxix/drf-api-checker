@@ -37,7 +37,7 @@ Contract violations can happen when:
 How it works:
 -------------
 
-First time the test is ran, the response and model instances are serialized and
+First time the test has ran, the response and model instances are serialized and
 saved on the disk; any further execution is checked against this first response.
 
 Test data are saved in the same directory where the test module lives,

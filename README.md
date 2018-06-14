@@ -130,7 +130,7 @@ Links
 | Project home page: | https://github.com/saxix/drf-api-checker                   |
 | Issue tracker:     | https://github.com/saxix/drf-api-checker/issues?sort       |
 | Download:          | http://pypi.python.org/pypi/drf-api-checker/               |
-| Documentation:     | https://drf-api-checker.readthedocs.org/en/latest/         |
+| Documentation:     | https://drf-api-checker.readthedocs.org/en/develop/         |
 
 
 

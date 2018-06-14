@@ -104,7 +104,7 @@ pytest integraation is provided by two helpers `frozenfixture` and `contract`::
 
 
     from django.urls import reverse
-    from drf_api_checker.pytest import contract
+    from drf_api_checker.pytest import contract, frozenfixture
 
 
     @frozenfixture

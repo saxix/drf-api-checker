@@ -15,9 +15,9 @@ import sys, os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)))
 
-from django.conf import settings
-
-settings.configure()
+# from django.conf import settings
+#
+# settings.configure()
 
 import drf_api_checker
 

@@ -4,10 +4,6 @@ python:
   - 3.6
 
 
-cache:
-  directories:
-    - $HOME/.cache/pip
-
 env:
   - DJANGO=1.10
   - DJANGO=1.11

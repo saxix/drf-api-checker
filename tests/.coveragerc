@@ -1,6 +1,7 @@
 [run]
 branch = True
 source = drf_api_checker
+include =
 
 omit = tests/**
 

@@ -68,3 +68,15 @@ Create a custom :ref:`Recorder` and override ``client`` property
     @contract(recorder_class=MyRecorder)
     def test_user_list(user):
         return reverse('api:user-list')
+
+
+
+Check methods other than GET
+----------------------------
+
+.. code-block:: python
+
+    from drf_api_checker.recorder import Recorder
+    from drf_api_checker.pytest import contract, frozenfixture
+
+

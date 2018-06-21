@@ -27,6 +27,11 @@ class DemoApi(ApiCheckerMixin):
     def test_a_base(self):
         self.assertAPI(self.url)
 
+    def test_a_method_put(self):
+        self.url = reverse("master-update", args=[self.get_fixture("master").pk])
+        self.assertPUT(self.url, {"name": 'abc',
+                                  "capabilities": []})
+
     def test_b_remove_field(self):
         with mock.patch('demo.serializers.MasterSerializer.Meta.fields', ('name',)):
             with pytest.raises(FieldMissedError):

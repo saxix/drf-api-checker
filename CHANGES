@@ -1,3 +1,8 @@
+Release 0.3
+-----------
+* add support for GET/POST/PATCH/DELETE/HEAD
+
+
 Release 0.2
 -----------
 * improve subclasssing support

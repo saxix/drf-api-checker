@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=100)),
                 ('alias', models.CharField(max_length=100)),
                 ('timestamp', models.DateTimeField(auto_now=True)),
-                ('capabilities', models.ManyToManyField(to='demo.Capability')),
+                ('capabilities', models.ManyToManyField(to='demo.Capability', blank=True, null=True)),
             ],
             options={
                 'ordering': ('id',),

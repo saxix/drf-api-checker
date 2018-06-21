@@ -17,7 +17,7 @@ class Master(models.Model):
     name = models.CharField(max_length=100)
     alias = models.CharField(max_length=100)
 
-    capabilities = models.ManyToManyField(Capability)
+    capabilities = models.ManyToManyField(Capability, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now=True)
 
     class Meta:

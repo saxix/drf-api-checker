@@ -2,7 +2,7 @@
 import inspect
 import os
 
-from django.test import Client
+from rest_framework.test import APIClient
 
 from drf_api_checker.fs import clean_url, get_filename
 from drf_api_checker.recorder import Recorder
@@ -32,7 +32,7 @@ class ApiCheckerMixin:
 
     """
     recorder_class = Recorder
-
+    client_class = APIClient
     def setUp(self):
         super().setUp()
         self.client = self.client_class()
@@ -84,6 +84,9 @@ class ApiCheckerMixin:
     def assertAPI(self, url, allow_empty=False, check_headers=True, check_status=True, name=None):
         self.recorder.assertAPI(url, allow_empty, check_headers, check_status, name)
 
+    def assertPUT(self, url, data, allow_empty=False, check_headers=True, check_status=True, name=None):
+        self.recorder.assertPUT(url, data, allow_empty, check_headers, check_status, name)
+
 
 class ApiCheckerBase(type):
     """
@@ -120,11 +123,11 @@ test_url__api_v2_interventions_101 (etools.applications.partners.tests.test_api.
             def _inner(self):
                 self.assertAPI(url)
 
-            _inner.__name__ = "test_url__" + clean_url(u)
+            _inner.__name__ = "test_url__" + clean_url('get', u)
             return _inner
 
         if 'URLS' not in attributedict:  # pragma: no cover
-            raise ValueError(f"Error creatine {clsname}. "
+            raise ValueError(f"Error creating {clsname}. "
                              f"ApiCheckerBase requires URLS attribute ")
 
         for u in attributedict['URLS']:

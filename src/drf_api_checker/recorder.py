@@ -22,10 +22,11 @@ class Recorder:
         if self.owner:
             return self.owner.client
         else:
-            return Client()
+            from rest_framework.test import APIClient
+            return APIClient()
 
-    def get_response_filename(self, url):
-        return get_filename(self.data_dir, clean_url(url) + '.response.json')
+    def get_response_filename(self, method, url):
+        return get_filename(self.data_dir, clean_url(method, url) + '.response.json')
 
     def _compare_dict(self, response, stored, path='', view='unknown'):
         for field_name, v in response.items():
@@ -64,7 +65,14 @@ class Recorder:
             raise FieldAddedError(view, ", ".join(added), filename)
         self._compare_dict(response, expected, view=view)
 
-    def assertAPI(self, url, allow_empty=False, check_headers=True, check_status=True, expect_errors=False, name=None):
+    def assertPUT(self, url, data, allow_empty=False, check_headers=True, check_status=True,
+                  expect_errors=False, name=None):
+        self.assertAPI(url, data=data, method='put', allow_empty=allow_empty,
+                       check_headers=check_headers, check_status=check_status,
+                       expect_errors=expect_errors, name=name)
+
+    def assertAPI(self, url, allow_empty=False, check_headers=True, check_status=True,
+                  expect_errors=False, name=None, method='get', data=None):
         """
         check url for response changes
 
@@ -76,9 +84,9 @@ class Recorder:
         :raises: AssertionError
         """
         view = resolve(url).func.cls
-
-        filename = self.get_response_filename(name or url)
-        response = self.client.get(url)
+        m = getattr(self.client, method.lower())
+        filename = self.get_response_filename(method, name or url)
+        response = m(url, data=data)
         assert response.accepted_renderer
         payload = response.data
         if not allow_empty and not payload:

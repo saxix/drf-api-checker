@@ -43,6 +43,25 @@ Field `{self.field_name}` does not match.
 - received: `{self.receiced}`"""
 
 
+class HeaderError(ContractError):
+    def __init__(self, view, header, expected, received, filename, extra=""):
+        self.view = view
+        self.field_name = header
+        self.expected = expected
+        self.received = received
+        self.filename = filename
+        self.extra = extra
+
+    def __str__(self) -> str:
+        return rf"""View `{self.view}` breaks the contract.
+Datadir: {self.filename}
+Field `{self.field_name}` does not match.
+- expected: `{self.expected}`
+- received: `{self.received}`
+{self.extra}
+"""
+
+
 class StatusCodeError(ContractError):
     def __init__(self, view, received, expected):
         self.view = view
@@ -51,5 +70,3 @@ class StatusCodeError(ContractError):
 
     def __str__(self) -> str:
         return f"View `{self.view}` breaks the contract. Expected status {self.expected}, received {self.received}"
-
-

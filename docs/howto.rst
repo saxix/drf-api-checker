@@ -16,7 +16,7 @@ ApiCheckerMixin
 
         def test_customer_detail(self):
             url = reverse("customer-detail", args=[self.get_fixture('customer').pk])
-            self.assertAPI(url)
+            self.assertGET(url)
 
 
 ApiCheckerBase

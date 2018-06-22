@@ -4,12 +4,20 @@ from pathlib import Path
 
 import pytest
 
-from drf_api_checker.pytest import frozenfixture
-
 
 def pytest_configure(config):
     here = os.path.dirname(__file__)
     sys.path.insert(0, str(Path(here) / 'demoapp'))
+
+
+@pytest.fixture(autouse=True)
+def setup_recorder(monkeypatch):
+    import django
+    v = ".".join(map(str, django.VERSION[0:2]))
+    target = f"_api_checker_{v}"
+    monkeypatch.setattr('drf_api_checker.recorder.BASE_DATADIR', target)
+    monkeypatch.setattr('drf_api_checker.unittest.BASE_DATADIR', target)
+    monkeypatch.setattr('drf_api_checker.pytest.BASE_DATADIR', target)
 
 
 @pytest.fixture(scope='session')
@@ -46,9 +54,3 @@ def masters(db):
 def details(db):
     from demo.factories import DetailFactory
     return DetailFactory(), DetailFactory()
-
-
-@frozenfixture
-def frozen_detail(db):
-    from demo.factories import DetailFactory
-    return DetailFactory()

@@ -1,6 +1,7 @@
 Release 0.3
 -----------
 * add support for GET/POST/PATCH/DELETE/HEAD
+* BACKWARD INCONPATIBLE: `assertAPI` is now `assertGET` more consistent with new `assertPUT`, `assertPOST`, `assertDELETE`
 
 
 Release 0.2

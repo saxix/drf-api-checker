@@ -2,13 +2,10 @@
 import inspect
 import os
 
-from rest_framework.test import APIClient
-
 from drf_api_checker.fs import clean_url, get_filename
-from drf_api_checker.recorder import Recorder
+from drf_api_checker.recorder import BASE_DATADIR, Recorder
 from drf_api_checker.utils import dump_fixtures, load_fixtures
-
-BASE_DATADIR = '_api_checker'
+from rest_framework.test import APIClient
 
 
 class ApiCheckerMixin:
@@ -18,7 +15,7 @@ class ApiCheckerMixin:
     How to use it:
 
     - implement get_fixtures() to create data for test. It should returns a dictionary
-    - use self.assertAPI(url) to check urls contract
+    - use self.assert<METHOD>(url) to check urls contract
 
     Example:
 
@@ -28,26 +25,31 @@ class ApiCheckerMixin:
 
         def test_customer_detail(self):
             url = reverse("customer-detail", args=[self.get_fixture('customer').pk])
-            self.assertAPI(url)
+            self.assertGET(url)
 
     """
     recorder_class = Recorder
     client_class = APIClient
+
     def setUp(self):
         super().setUp()
         self.client = self.client_class()
         self._process_fixtures()
         self.recorder = self.recorder_class(self.data_dir, self)
 
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        cls.data_dir = os.path.join(os.path.dirname(inspect.getfile(cls)),
-                                    BASE_DATADIR,
-                                    cls.__module__, cls.__name__)
+    # @classmethod
+    # def setUpClass(cls):
+    #     super().setUpClass()
+    #     cls.data_dir = os.path.join(os.path.dirname(inspect.getfile(cls)),
+    #                                 BASE_DATADIR,
+    #                                 cls.__module__, cls.__name__)
 
-    # def get_response_filename(self, url):
-    #     return get_filename(self.data_dir, clean_url(url) + '.response.json')
+    @property
+    def data_dir(self):
+        cls = type(self)
+        return os.path.join(os.path.dirname(inspect.getfile(cls)),
+                            BASE_DATADIR,
+                            cls.__module__, cls.__name__)
 
     def get_fixtures_filename(self, basename='fixtures'):
         return get_filename(self.data_dir, f'{basename}.json')
@@ -81,11 +83,27 @@ class ApiCheckerMixin:
             if self.__fixtures:
                 dump_fixtures(self.__fixtures, fname)
 
-    def assertAPI(self, url, allow_empty=False, check_headers=True, check_status=True, name=None):
-        self.recorder.assertAPI(url, allow_empty, check_headers, check_status, name)
+    def assertGET(self, url, allow_empty=False, check_headers=True, check_status=True,
+                  expect_errors=False, name=None):
+        self.recorder._assertCALL(url, allow_empty=allow_empty, check_headers=check_headers,
+                                  check_status=check_status, expect_errors=expect_errors,
+                                  name=name)
 
-    def assertPUT(self, url, data, allow_empty=False, check_headers=True, check_status=True, name=None):
-        self.recorder.assertPUT(url, data, allow_empty, check_headers, check_status, name)
+    def assertPUT(self, url, data, allow_empty=False, check_headers=True, check_status=True,
+                  expect_errors=False, name=None):
+        self.recorder.assertPUT(url, data, allow_empty=allow_empty, check_headers=check_headers,
+                                check_status=check_status, expect_errors=expect_errors, name=name)
+
+    def assertPOST(self, url, data, allow_empty=False, check_headers=True, check_status=True,
+                   expect_errors=False, name=None):
+        self.recorder.assertPOST(url, data, allow_empty=allow_empty, check_headers=check_headers,
+                                 check_status=check_status, expect_errors=expect_errors, name=name)
+
+    def assertDELETE(self, url, allow_empty=False, check_headers=True, check_status=True,
+                     expect_errors=False, name=None):
+        self.recorder.assertDELETE(url, allow_empty=allow_empty, check_headers=check_headers,
+                                   check_status=check_status, expect_errors=expect_errors,
+                                   name=name)
 
 
 class ApiCheckerBase(type):
@@ -121,7 +139,7 @@ test_url__api_v2_interventions_101 (etools.applications.partners.tests.test_api.
 
         def check_url(url):
             def _inner(self):
-                self.assertAPI(url)
+                self.assertGET(url)
 
             _inner.__name__ = "test_url__" + clean_url('get', u)
             return _inner

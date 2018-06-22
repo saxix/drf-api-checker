@@ -18,7 +18,7 @@ def mktree(newdir):
 
 
 def clean_url(method, url):
-    return f"{method}_{url[1:-1].replace('/', '_')}"
+    return f"{method}_{url.strip('.').replace('/', '_')}"
 
 
 def get_filename(base, name):

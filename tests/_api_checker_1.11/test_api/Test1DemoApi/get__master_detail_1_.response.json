@@ -1,0 +1,32 @@
+{
+    "status_code": 200,
+    "headers": {
+        "content-type": [
+            "Content-Type",
+            "application/json"
+        ],
+        "vary": [
+            "Vary",
+            "Accept, Cookie"
+        ],
+        "allow": [
+            "Allow",
+            "GET, HEAD, OPTIONS"
+        ],
+        "x-frame-options": [
+            "X-Frame-Options",
+            "SAMEORIGIN"
+        ],
+        "content-length": [
+            "Content-Length",
+            "85"
+        ]
+    },
+    "data": {
+        "id": 1,
+        "name": "Name 000",
+        "capabilities": [],
+        "timestamp": "2018-06-22T04:26:34.568000"
+    },
+    "content_type": null
+}

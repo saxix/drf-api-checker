@@ -25,22 +25,40 @@ class DemoApi(ApiCheckerMixin):
         return {"master": MasterFactory()}
 
     def test_a_base(self):
-        self.assertAPI(self.url)
+        self.assertGET(self.url)
+
+    def test_a_put(self):
+        self.url = reverse("master-update", args=[self.get_fixture("master").pk])
+        self.assertPUT(self.url, {"name": 'abc',
+                                  "capabilities": []})
+
+    def test_a_post(self):
+        self.url = reverse("master-create")
+        self.assertPOST(self.url, {"name": 'abc',
+                                   "capabilities": []})
+
+    def test_a_delete(self):
+        self.url = reverse("master-delete", args=[self.get_fixture("master").pk])
+        self.assertDELETE(self.url, {"name": 'abc',
+                                     "capabilities": []})
 
     def test_b_remove_field(self):
+        self.assertGET(self.url, name='remove_field', check_headers=False)
         with mock.patch('demo.serializers.MasterSerializer.Meta.fields', ('name',)):
             with pytest.raises(FieldMissedError):
-                self.assertAPI(self.url)
+                self.assertGET(self.url, name='remove_field', check_headers=False)
 
     def test_c_add_field(self):
+        self.assertGET(self.url, name='add_field', check_headers=False)
+
         with mock.patch('demo.serializers.MasterSerializer.Meta.fields',
                         ('id', 'name', 'alias', 'capabilities', 'timestamp')):
             with pytest.raises(FieldAddedError):
-                self.assertAPI(self.url)
+                self.assertGET(self.url, name='add_field', check_headers=False)
 
     def test_detail(self):
         self.url = reverse("master-detail", args=[self.get_fixture("master").pk])
-        self.assertAPI(self.url)
+        self.assertGET(self.url)
 
 
 class Test1DemoApi(DemoApi, TestCase):

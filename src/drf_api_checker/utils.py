@@ -104,5 +104,6 @@ def load_response(file_or_stream):
     r = Response(c['data'],
                  status=c['status_code'],
                  content_type=c['content_type'])
+    r._is_rendered = True
     r._headers = c['headers']
     return r

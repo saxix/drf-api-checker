@@ -1,7 +1,7 @@
 import re
-from sphinx import addnodes, roles
-from sphinx.util.console import bold
-from sphinx.util.compat import Directive
+
+from docutils.parsers.rst import Directive
+from sphinx import addnodes
 try:
     from sphinx.writers.html import SmartyPantsHTMLTranslator as HTMLTranslator
 except ImportError:  # Sphinx 1.6+

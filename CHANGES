@@ -1,3 +1,8 @@
+Release 0.4 (dev)
+-----------------
+* add pytest option `--reset-contracts`
+
+
 Release 0.3
 -----------
 * add support for GET/POST/PATCH/DELETE/HEAD

@@ -9,7 +9,6 @@ from drf_api_checker.exceptions import (
 from drf_api_checker.fs import clean_url, get_filename
 from drf_api_checker.utils import _write, load_response, serialize_response
 
-OVEWRITE = os.environ.get('API_CHECKER_RESET', False)
 HEADERS_TO_CHECK = ['Content-Type', 'Content-Length', 'Allow']
 BASE_DATADIR = '_api_checker'
 
@@ -123,7 +122,7 @@ class Recorder:
         if not allow_empty and response.status_code == 404:
             raise ValueError(f"View {self.view} returned 404 status code. Check your test")
 
-        if not os.path.exists(self.filename) or OVEWRITE:
+        if not os.path.exists(self.filename) or os.environ.get('API_CHECKER_RESET', False):
             _write(self.filename, serialize_response(response))
 
         stored = load_response(self.filename)

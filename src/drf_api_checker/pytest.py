@@ -31,7 +31,7 @@ def frozenfixture(func):
                                    func.__module__,
                                    func.__name__,
                                    ) + '.fixture.json'
-        if os.path.exists(destination):
+        if os.path.exists(destination) and not os.environ.get('API_CHECKER_RESET'):
             return load_fixtures(destination)[func.__name__]
         mktree(os.path.dirname(destination))
         data = func(*args, **kwargs)

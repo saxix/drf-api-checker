@@ -31,16 +31,20 @@ class Recorder:
     def get_response_filename(self, method, url):
         return get_filename(self.data_dir, clean_url(method, url) + '.response.json')
 
+    def _get_custom_asserter(self, path, field_name):
+        for attr in [f'assert_{path}_{field_name}', f'assert_{field_name}']:
+            for target in [self, self.owner]:
+                if hasattr(target, attr):
+                    return getattr(target, attr)
+        return None
+
     def _compare_dict(self, response, stored, path='', view='unknown'):
         for field_name, v in response.items():
             if isinstance(v, dict):
                 self._compare_dict(v, stored[field_name], f"{path}_{field_name}", view=view)
             else:
-                if hasattr(self, f'assert_{path or field_name}'):
-                    asserter = getattr(self, f'assert_{path or field_name}')
-                    asserter(response, stored, path)
-                elif hasattr(self.owner, f'assert_{path or field_name}'):
-                    asserter = getattr(self.owner, f'assert_{path or field_name}')
+                asserter = self._get_custom_asserter(path, field_name)
+                if asserter:
                     asserter(response, stored, path)
                 else:
                     if isinstance(v, set):

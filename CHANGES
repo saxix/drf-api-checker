@@ -1,6 +1,7 @@
 Release 0.4 (dev)
 -----------------
 * add pytest option `--reset-contracts`
+* fixes custom asserter resolution
 
 
 Release 0.3

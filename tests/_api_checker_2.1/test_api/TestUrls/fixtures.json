@@ -1,0 +1,15 @@
+{
+    "master": {
+        "master": {
+            "model": "demo.master",
+            "pk": 101,
+            "fields": {
+                "name": "Name 002",
+                "alias": "Alias 002",
+                "timestamp": "2018-09-20T04:00:41.671",
+                "capabilities": []
+            }
+        },
+        "deps": []
+    }
+}

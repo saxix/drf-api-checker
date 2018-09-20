@@ -76,7 +76,7 @@ class ApiCheckerMixin:
     def _process_fixtures(self):
         """ store or retrieve test fixtures """
         fname = self.get_fixtures_filename()
-        if os.path.exists(fname):
+        if os.path.exists(fname) and not os.environ.get('API_CHECKER_RESET'):
             self.__fixtures = load_fixtures(fname)
         else:
             self.__fixtures = self.get_fixtures()

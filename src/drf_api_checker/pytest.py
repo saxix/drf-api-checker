@@ -7,6 +7,19 @@ import pytest
 from drf_api_checker.recorder import BASE_DATADIR, Recorder
 
 
+def pytest_addoption(parser):
+    group = parser.getgroup('DRF API Checker')
+    group._addoption('--reset-contracts',
+                     action='store_true', dest='reset_contracts', default=False,
+                     help='Re-creates all API checker contracts ')
+
+
+@pytest.fixture(autouse=True, scope="session")
+def configure_env():
+    if pytest.config.option.reset_contracts:
+        os.environ['API_CHECKER_RESET'] = "1"
+
+
 def frozenfixture(func):
     from drf_api_checker.utils import load_fixtures, dump_fixtures
     from drf_api_checker.fs import mktree
@@ -18,7 +31,7 @@ def frozenfixture(func):
                                    func.__module__,
                                    func.__name__,
                                    ) + '.fixture.json'
-        if os.path.exists(destination):
+        if os.path.exists(destination) and not os.environ.get('API_CHECKER_RESET'):
             return load_fixtures(destination)[func.__name__]
         mktree(os.path.dirname(destination))
         data = func(*args, **kwargs)

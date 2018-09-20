@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+import os
 import tempfile
 from unittest import mock
 
@@ -44,13 +45,14 @@ class DemoApi(ApiCheckerMixin):
 
     def test_b_remove_field(self):
         self.assertGET(self.url, name='remove_field', check_headers=False)
+        os.environ['API_CHECKER_RESET'] = "" # ignore --reset-contracts
         with mock.patch('demo.serializers.MasterSerializer.Meta.fields', ('name',)):
             with pytest.raises(FieldMissedError):
                 self.assertGET(self.url, name='remove_field', check_headers=False)
 
     def test_c_add_field(self):
         self.assertGET(self.url, name='add_field', check_headers=False)
-
+        os.environ['API_CHECKER_RESET'] = "" # ignore --reset-contracts
         with mock.patch('demo.serializers.MasterSerializer.Meta.fields',
                         ('id', 'name', 'alias', 'capabilities', 'timestamp')):
             with pytest.raises(FieldAddedError):

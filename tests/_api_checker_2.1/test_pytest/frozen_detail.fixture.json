@@ -1,0 +1,25 @@
+{
+    "frozen_detail": {
+        "master": {
+            "model": "demo.detail",
+            "pk": 1,
+            "fields": {
+                "name": "Name 003",
+                "master": 1,
+                "timestamp": "2018-09-20T04:00:41.735"
+            }
+        },
+        "deps": [
+            {
+                "model": "demo.master",
+                "pk": 1,
+                "fields": {
+                    "name": "Name 008",
+                    "alias": "Alias 008",
+                    "timestamp": "2018-09-20T04:00:41.735",
+                    "capabilities": []
+                }
+            }
+        ]
+    }
+}

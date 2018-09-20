@@ -1,5 +1,10 @@
-Release 0.4 (dev)
------------------
+Release 0.4.1)
+-------------
+* fixes wrong packaging
+
+
+Release 0.4
+-----------
 * add pytest option `--reset-contracts`
 * fixes custom asserter resolution
 * add support django 2.1

@@ -118,6 +118,25 @@ pytest integraation is provided by two helpers `frozenfixture` and `contract`::
         return url
 
 
+Custom checks:
+--------------
+
+Sometimes it is not possible to check a field by value but exists anyway a mechanism 
+to check the contract (ie. `timestamp` field - _ignore for this example tools like [freezegun](https://github.com/spulec/freezegun)_)
+
+To handle this situations you can write custom `Recorder` with specia `asserters`:
+
+
+    from drf_api_checker.recorder import Recorder
+
+    class TimestampRecorder(Recorder):
+    
+        def assert_last_modify_date(self, response: Response, stored: Response, path: str):
+            value = response['last_modify_date']
+            assert datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%fZ')
+
+custom asserter is a method named `assert_<field_name>`, in case of nested serializers
+you can have more specific asserter using `assert_<fk_field_name>_<field_name>`
 
 
 Links

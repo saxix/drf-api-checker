@@ -2,7 +2,7 @@
 import factory
 from factory import DjangoModelFactory
 
-from .models import Capability, Master, Detail
+from .models import Capability, Detail, Master
 
 
 class CapabilityFactory(DjangoModelFactory):

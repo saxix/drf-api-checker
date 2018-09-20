@@ -1,7 +1,10 @@
 from django.conf.urls import url
 from django.contrib import admin
 
-from .api import MasterListAPIView, MasterRetrieveAPIView, MasterUpdateAPIView, MasterDeleteAPIView, MasterCreatAPIView
+from .api import (
+    MasterCreatAPIView, MasterDeleteAPIView, MasterListAPIView, MasterRetrieveAPIView,
+    MasterUpdateAPIView
+)
 
 admin.autodiscover()
 

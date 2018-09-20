@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 import ast
-import os
 import codecs
+import os
 import re
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__)))
 init = os.path.join(ROOT, 'src', 'drf_api_checker', '__init__.py')
@@ -16,7 +16,6 @@ with open(init, 'rb') as f:
     content = f.read().decode('utf-8')
     version = str(ast.literal_eval(_version_re.search(content).group(1)))
     name = str(ast.literal_eval(_name_re.search(content).group(1)))
-
 
 
 def read(*parts):

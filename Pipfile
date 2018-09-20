@@ -20,6 +20,7 @@ pdbpp = "*"
 tox = "*"
 check-manifest = "*"
 sphinx = "*"
+pre-commit = "*"
 
 [requires]
 python_version = "3.6"

@@ -4,6 +4,7 @@ import os
 from functools import wraps
 
 import pytest
+
 from drf_api_checker.recorder import BASE_DATADIR, Recorder
 
 

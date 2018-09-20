@@ -4,15 +4,16 @@ import os
 import tempfile
 from unittest import mock
 
-import pytest
 from django.test import TestCase
 from django.urls import reverse
 
+import pytest
 from demo.factories import MasterFactory
 from demo.serializers import MasterSerializer
-from drf_api_checker.unittest import ApiCheckerMixin, ApiCheckerBase
-from drf_api_checker.exceptions import FieldMissedError, FieldAddedError
+
+from drf_api_checker.exceptions import FieldAddedError, FieldMissedError
 from drf_api_checker.recorder import Recorder
+from drf_api_checker.unittest import ApiCheckerBase, ApiCheckerMixin
 
 
 class DemoApi(ApiCheckerMixin):

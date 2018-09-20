@@ -2,10 +2,11 @@
 import inspect
 import os
 
+from rest_framework.test import APIClient
+
 from drf_api_checker.fs import clean_url, get_filename
 from drf_api_checker.recorder import BASE_DATADIR, Recorder
 from drf_api_checker.utils import dump_fixtures, load_fixtures
-from rest_framework.test import APIClient
 
 
 class ApiCheckerMixin:

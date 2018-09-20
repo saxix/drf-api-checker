@@ -2,6 +2,8 @@ Release 0.4 (dev)
 -----------------
 * add pytest option `--reset-contracts`
 * fixes custom asserter resolution
+* add support django 2.1
+* add support python 3.7
 
 
 Release 0.3

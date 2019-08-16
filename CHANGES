@@ -1,3 +1,13 @@
+Release 0.6
+-----------
+* fixes compatibility pytest 5.0
+
+
+Release 0.5.1
+-------------
+* fixes wrong packaging
+
+
 Release 0.5
 -----------
 * consider url arguments when generate filename to avoid name clashing

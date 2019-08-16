@@ -16,8 +16,8 @@ def pytest_addoption(parser):
 
 
 @pytest.fixture(autouse=True, scope="session")
-def configure_env():
-    if pytest.config.option.reset_contracts:
+def configure_env(request):
+    if request.option.reset_contracts:
         os.environ['API_CHECKER_RESET'] = "1"
 
 

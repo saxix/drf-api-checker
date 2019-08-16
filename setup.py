@@ -35,6 +35,7 @@ setup(
     license="MIT",
     description='DjangoRestFramework API checker',
     long_description=open("README.md").read(),
+    long_description_content_type='text/markdown',
     package_dir={'': 'src'},
     packages=find_packages('src'),
     include_package_data=True,

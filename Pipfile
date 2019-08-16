@@ -5,7 +5,6 @@ name = "pypi"
 
 [packages]
 djangorestframework = "*"
-"e1839a8" = {path = ".", editable = true}
 
 [dev-packages]
 pytest-cov = "*"
@@ -20,6 +19,9 @@ pdbpp = "*"
 tox = "*"
 check-manifest = "*"
 sphinx = "*"
+pre-commit = "*"
+flake8 = "*"
+isort = "*"
 
 [requires]
 python_version = "3.6"

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
 import json
 import os
+from datetime import datetime
 from io import BytesIO
 
 import pytest
@@ -10,7 +10,9 @@ from dateutil.utils import today
 from rest_framework.response import Response
 
 from drf_api_checker.fs import mktree
-from drf_api_checker.utils import dump_fixtures, _write, _read, load_fixtures, serialize_response, load_response
+from drf_api_checker.utils import (
+    _read, _write, dump_fixtures, load_fixtures, load_response, serialize_response
+)
 
 
 def test_mktree(tmpdir):
@@ -114,5 +116,3 @@ def test_load_response():
                          'date': today().date()}, status=200)
     r = load_response(BytesIO(serialize_response(response)))
     assert r.status_code == response.status_code
-
-

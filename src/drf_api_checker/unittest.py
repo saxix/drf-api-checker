@@ -2,10 +2,11 @@
 import inspect
 import os
 
+from rest_framework.test import APIClient
+
 from drf_api_checker.fs import clean_url, get_filename
 from drf_api_checker.recorder import BASE_DATADIR, Recorder
 from drf_api_checker.utils import dump_fixtures, load_fixtures
-from rest_framework.test import APIClient
 
 
 class ApiCheckerMixin:
@@ -84,10 +85,10 @@ class ApiCheckerMixin:
                 dump_fixtures(self.__fixtures, fname)
 
     def assertGET(self, url, allow_empty=False, check_headers=True, check_status=True,
-                  expect_errors=False, name=None):
+                  expect_errors=False, name=None, data=None):
         self.recorder._assertCALL(url, allow_empty=allow_empty, check_headers=check_headers,
                                   check_status=check_status, expect_errors=expect_errors,
-                                  name=name)
+                                  name=name, data=data)
 
     def assertPUT(self, url, data, allow_empty=False, check_headers=True, check_status=True,
                   expect_errors=False, name=None):
@@ -103,7 +104,7 @@ class ApiCheckerMixin:
                      expect_errors=False, name=None):
         self.recorder.assertDELETE(url, allow_empty=allow_empty, check_headers=check_headers,
                                    check_status=check_status, expect_errors=expect_errors,
-                                   name=name)
+                                   name=name, data=None)
 
 
 class ApiCheckerBase(type):
@@ -138,10 +139,15 @@ test_url__api_v2_interventions_101 (etools.applications.partners.tests.test_api.
         clazz = type.__new__(cls, clsname, superclasses, attributedict)
 
         def check_url(url):
-            def _inner(self):
-                self.assertGET(url)
+            if isinstance(url, (list, tuple)):
+                url, data = url
+            else:
+                data = None
 
-            _inner.__name__ = "test_url__" + clean_url('get', u)
+            def _inner(self):
+                self.assertGET(url, data=data)
+
+            _inner.__name__ = "test_url__" + clean_url('get', url, data)
             return _inner
 
         if 'URLS' not in attributedict:  # pragma: no cover

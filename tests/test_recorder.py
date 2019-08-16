@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pytest
 
-from drf_api_checker.exceptions import FieldValueError, FieldAddedError, FieldMissedError
+from drf_api_checker.exceptions import FieldAddedError, FieldMissedError, FieldValueError
 from drf_api_checker.recorder import Recorder
 
 

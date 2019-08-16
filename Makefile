@@ -5,13 +5,11 @@ BUILDDIR='~build'
 	mkdir -p ${BUILDDIR}
 
 
-test:
-	py.test -v --create-db
+#test:
+#	py.test -v --create-db
 
-qa:
-	flake8 src/ tests/
-	isort -rc src/ --check-only
-	check-manifest
+lint:
+	pre-commit run --all-files
 
 test:
 	coverage run --rcfile=tests/.coveragerc --source drf_api_checker -m pytest tests

@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Master, Detail
+
+from .models import Detail, Master
 
 
 class MasterSerializer(serializers.ModelSerializer):

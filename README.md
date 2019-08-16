@@ -15,8 +15,8 @@ Contract violations can happen when:
 
 - fields are removed from Serializer
 - field representation changes (ie. date/number format, )
-- Response status code changes (optional)
-- Response headers change (optional)
+- Response status code changes (optional check)
+- Response headers change (optional check)
 
 
 How it works:
@@ -100,7 +100,7 @@ than ApiCheckerMixin.
 **pytest**
 
 
-pytest integraation is provided by two helpers `frozenfixture` and `contract`::
+pytest integration is provided by two helpers `frozenfixture` and `contract`::
 
 
     from django.urls import reverse

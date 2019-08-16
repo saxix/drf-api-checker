@@ -1,0 +1,23 @@
+{
+    "status_code": 204,
+    "headers": {
+        "vary": [
+            "Vary",
+            "Accept, Cookie"
+        ],
+        "allow": [
+            "Allow",
+            "DELETE, OPTIONS"
+        ],
+        "x-frame-options": [
+            "X-Frame-Options",
+            "SAMEORIGIN"
+        ],
+        "content-length": [
+            "Content-Length",
+            "0"
+        ]
+    },
+    "data": null,
+    "content_type": null
+}

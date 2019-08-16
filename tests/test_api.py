@@ -7,6 +7,7 @@ from unittest import mock
 import pytest
 from django.test import TestCase
 from django.urls import reverse
+from rest_framework.response import Response
 
 from demo.factories import MasterFactory
 from demo.serializers import MasterSerializer
@@ -15,8 +16,16 @@ from drf_api_checker.exceptions import FieldAddedError, FieldMissedError
 from drf_api_checker.recorder import Recorder
 from drf_api_checker.unittest import ApiCheckerBase, ApiCheckerMixin
 
+class MyRecorder(Recorder):
+    def assert_timestamp(self, response: Response, stored: Response, path: str):
+        # only check datetime format
+        value = response['timestamp']
+        assert datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
+
+
 
 class DemoApi(ApiCheckerMixin):
+    recorder_class = MyRecorder
 
     def setUp(self):
         super().setUp()
@@ -30,7 +39,7 @@ class DemoApi(ApiCheckerMixin):
         self.assertGET(self.url)
 
     def test_a_base_allow_empty(self):
-        self.assertGET(self.url, allow_empty=True)
+        self.assertGET(self.url, allow_empty=True, data={"a":1})
 
     def test_a_put(self):
         self.url = reverse("master-update", args=[self.get_fixture("master").pk])
@@ -77,7 +86,7 @@ class Test2DemoApi(DemoApi, TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.data_dir = tempfile.mkdtemp()
+        # cls.data_dir = tempfile.mkdtemp()
         cls.recorder = Recorder(cls.data_dir, cls)
 
 

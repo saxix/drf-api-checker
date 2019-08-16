@@ -4,10 +4,10 @@ import os
 import tempfile
 from unittest import mock
 
+import pytest
 from django.test import TestCase
 from django.urls import reverse
 
-import pytest
 from demo.factories import MasterFactory
 from demo.serializers import MasterSerializer
 
@@ -28,6 +28,9 @@ class DemoApi(ApiCheckerMixin):
 
     def test_a_base(self):
         self.assertGET(self.url)
+
+    def test_a_base_allow_empty(self):
+        self.assertGET(self.url, allow_empty=True)
 
     def test_a_put(self):
         self.url = reverse("master-update", args=[self.get_fixture("master").pk])

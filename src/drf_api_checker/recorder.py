@@ -28,8 +28,8 @@ class Recorder:
             from rest_framework.test import APIClient
             return APIClient()
 
-    def get_response_filename(self, method, url):
-        return get_filename(self.data_dir, clean_url(method, url) + '.response.json')
+    def get_response_filename(self, method, url, data):
+        return get_filename(self.data_dir, clean_url(method, url, data) + '.response.json')
 
     def _get_custom_asserter(self, path, field_name):
         for attr in [f'assert_{path}_{field_name}', f'assert_{field_name}']:
@@ -76,10 +76,10 @@ class Recorder:
             assert response == expected
 
     def assertGET(self, url, *, allow_empty=False, check_headers=True, check_status=True,
-                  expect_errors=False, name=None):
+                  expect_errors=False, name=None, data=None):
         self._assertCALL(url, allow_empty=allow_empty,
                          check_headers=check_headers, check_status=check_status,
-                         expect_errors=expect_errors, name=name)
+                         expect_errors=expect_errors, name=name, data=data)
 
     def assertPUT(self, url, data, *, allow_empty=False, check_headers=True, check_status=True,
                   expect_errors=False, name=None):
@@ -94,10 +94,10 @@ class Recorder:
                          expect_errors=expect_errors, name=name)
 
     def assertDELETE(self, url, *, allow_empty=False, check_headers=True, check_status=True,
-                     expect_errors=False, name=None):
+                     expect_errors=False, name=None, data=None):
         self._assertCALL(url, method='delete', allow_empty=allow_empty,
                          check_headers=check_headers, check_status=check_status,
-                         expect_errors=expect_errors, name=name)
+                         expect_errors=expect_errors, name=name, data=data)
 
     def _assertCALL(self, url, *, allow_empty=False, check_headers=True, check_status=True,
                     expect_errors=False, name=None, method='get', data=None):
@@ -113,7 +113,7 @@ class Recorder:
         """
         self.view = resolve(url).func.cls
         m = getattr(self.client, method.lower())
-        self.filename = self.get_response_filename(method, name or url)
+        self.filename = self.get_response_filename(method, name or url, data)
         response = m(url, data=data)
         assert response.accepted_renderer
         payload = response.data

@@ -1,6 +1,7 @@
 Release 0.5
 -----------
-*
+* consider url arguments when generate filename to avoid name clashing
+
 
 Release 0.4.1
 -------------

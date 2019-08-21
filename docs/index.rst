@@ -1,4 +1,5 @@
 .. include:: globals.txt
+
 .. _index:
 
 ===============================
@@ -61,13 +62,12 @@ In case something goes wrong the output will be
 **Field values mismatch**
 
 
-.. code-block:: bash
+.. code-block::
 
-
-    AssertionError: View `<class 'path.to.module.CustomerListAPIView>` breaks the contract.
-    Field `name` does not match.
-    - expected: `Partner 0`
-    - received: `Partner 11`
+    AssertionError: View '<class 'path.to.module.CustomerListAPIView>' breaks the contract.
+    Field 'name' does not match.
+    - expected: 'Partner 0'
+    - received: 'Partner 11'
 
 
 **Field removed**
@@ -91,23 +91,6 @@ In case something goes wrong the output will be
     `['country']`
 
 
-
-Content
-=======
-
-Support for django test is provided by:
-
-    - :ref:`ApiCheckerMixin`
-    - :ref:`ApiCheckerBase`
-
-pytest is supported via decorators:
-
-    - :ref:`frozenfixture`
-    - :ref:`contract`
-
-
-
-
 Table Of Contents
 =================
 
@@ -115,8 +98,10 @@ Table Of Contents
     :maxdepth: 1
 
     install
-    howto
-    recipes
+    unittest
+    unittest_recipes
+    pytest
+    pytest_recipes
     api
 
 

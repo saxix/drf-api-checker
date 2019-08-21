@@ -1,27 +1,13 @@
 .. include:: globals.txt
-.. _recipes:
 
-Common Recipes
-===============
+.. _pytest_recipes:
+
+PyTest Recipes
+==============
 
 
 Check ``DateTimeField()`` with ``auto_now=True``
-----------------------------------------------
-
-**Using Django TestCase:**
-
-Add a method ``assert_<fieldname>`` that check by format instead
-
-.. code-block:: python
-
-    class TestUrls(TestCase, metaclass=ApiCheckerBase):
-
-        def assert_timestamp(self, response, expected, path=''):
-            value = response['timestamp']
-            assert datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
-
-**With pytest:**
-
+------------------------------------------------
 
 Create a custom :ref:`Recorder` and pass it to :ref:`contract`
 
@@ -45,12 +31,6 @@ Create a custom :ref:`Recorder` and pass it to :ref:`contract`
 
 Check protected url
 -------------------
-
-**Using Django TestCase:**
-
-Using standard DRF way: ``self.client.login()`` or ``self.client.force_authenticate()``
-
-**With pytest:**
 
 Create a custom :ref:`Recorder` and override ``client`` property
 

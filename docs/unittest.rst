@@ -1,14 +1,16 @@
 .. include:: globals.txt
-.. _howto:
 
-HowTo
-=====
+.. _unittest:
 
+Unitest style test support
+==========================
+
+Unitest style is supported via  :ref:`ApiCheckerMixin` and :ref:`ApiCheckerBase`
 
 ApiCheckerMixin
 ---------------
 
-.. code-block:: python
+Base test looks like::
 
     class TestAPIAgreements(ApiCheckerMixin, TestCase):
         def get_fixtures(self):
@@ -17,6 +19,12 @@ ApiCheckerMixin
         def test_customer_detail(self):
             url = reverse("customer-detail", args=[self.get_fixture('customer').pk])
             self.assertGET(url)
+
+``get_fixtures`` must returns a dictionary of all the fixtures that need to be restored to
+have comparable responses.
+
+**WARNING**: when `factory_boy`_ is used pay attention to ForeignKeys. They need to be listed too
+and the factory need to be written in a way that can reproduce predictable records
 
 
 ApiCheckerBase

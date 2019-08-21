@@ -16,14 +16,12 @@ def pytest_addoption(parser):
 
 
 @pytest.fixture(autouse=True, scope="session")
-def configure_env(request, pytestconfig):
+def configure_env(request):
     option = False
-    if pytestconfig.getoption("reset_contracts"):
-        option = 1
-    elif hasattr(pytest, 'config'):
+    if hasattr(pytest, 'config'):
         option = pytest.config.option.reset_contracts
-    elif hasattr(request, 'option'):
-        option = request.option.reset_contracts
+    elif hasattr(request, 'config'):
+        option = request.config.option.reset_contracts
 
     if option:
         os.environ['API_CHECKER_RESET'] = "1"
@@ -35,11 +33,18 @@ def frozenfixture(func):
 
     @wraps(func)
     def _inner(*args, **kwargs):
-        destination = os.path.join(os.path.dirname(func.__code__.co_filename),
-                                   BASE_DATADIR,
-                                   func.__module__,
-                                   func.__name__,
+        parts = [os.path.dirname(func.__code__.co_filename),
+                 BASE_DATADIR,
+                 func.__module__,
+                 func.__name__, ]
+        if 'request' in kwargs:
+            request = kwargs['request']
+            viewset = request.getfixturevalue('viewset')
+            parts.append(viewset.__name__)
+
+        destination = os.path.join(*parts
                                    ) + '.fixture.json'
+
         if os.path.exists(destination) and not os.environ.get('API_CHECKER_RESET'):
             return load_fixtures(destination)[func.__name__]
         mktree(os.path.dirname(destination))
@@ -50,7 +55,14 @@ def frozenfixture(func):
     return pytest.fixture(_inner)
 
 
-def contract(recorder_class=Recorder, allow_empty=False, headers=True, status=True, name=None, method='get'):
+def contract(recorder_class=Recorder, allow_empty=False, name=None, method='get', checks=None, **kwargs):
+    if 'headers' in kwargs:
+        raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
+    if 'status' in kwargs:
+        raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
+    if kwargs:
+        raise AttributeError("Unknown arguments %s" % ",".join(kwargs.keys()))
+
     def _inner1(func):
         @wraps(func)
         def _inner(*args, **kwargs):
@@ -63,10 +75,9 @@ def contract(recorder_class=Recorder, allow_empty=False, headers=True, status=Tr
             if isinstance(url, (list, tuple)):
                 url, data = url
             recorder = recorder_class(data_dir)
-            recorder._assertCALL(url, allow_empty=allow_empty,
-                                 check_headers=headers,
-                                 check_status=status,
-                                 name=name, method=method, data=data)
+            recorder.assertCALL(url, allow_empty=allow_empty,
+                                checks=checks,
+                                name=name, method=method, data=data)
             return True
 
         return _inner

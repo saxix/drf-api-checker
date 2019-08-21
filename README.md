@@ -1,7 +1,10 @@
 # DRF API Checker
 
 
-[![pypi-version]][pypi] [![travis-png-m]][travis-l-m] [![codecov-badge]][codecov]
+[![pypi-version]][pypi] 
+[![travis-png-m]][travis-l-m] 
+[![rtd-badge]][rtd-link]
+[![codecov-badge]][codecov]
 
 
 This module offers some utilities to avoid unwanted changes in Django Rest Framework responses,
@@ -158,6 +161,9 @@ Links
 
 [travis-png-d]: https://secure.travis-ci.org/saxix/drf-api-checker.svg?branch=develop
 [travis-l-d]: https://travis-ci.org/saxix/drf-api-checker?branch=develop
+
+[rtd-badge]: https://readthedocs.org/projects/drf-api-checker/badge/?version=master&style=plastic
+[rtd-link]: https://drf-api-checker.readthedocs.org/en/master/
 
 [codecov-badge]: https://codecov.io/gh/saxix/drf-api-checker/branch/develop/graph/badge.svg
 [codecov]: https://codecov.io/gh/saxix/drf-api-checker

@@ -4,8 +4,8 @@ import os
 from django.urls import resolve
 
 from drf_api_checker.exceptions import (
-    FieldAddedError, FieldMissedError, FieldValueError, HeaderError, StatusCodeError
-)
+    FieldAddedError, FieldMissedError, FieldValueError, HeaderError, StatusCodeError,
+    DictKeyMissed, DictKeyAdded)
 from drf_api_checker.fs import clean_url, get_filename
 from drf_api_checker.utils import _write, load_response, serialize_response
 
@@ -58,10 +58,20 @@ class Recorder:
                     return getattr(target, attr)
         return None
 
-    def _compare_dict(self, response, stored, path='', view='unknown'):
+    def _compare_dict(self, response, stored, path=None, view='unknown', filename='unknown'):
+        try:
+            self.check_dict_keys(response, stored)
+        except DictKeyMissed as e:
+            raise FieldMissedError(view, e.keys)
+        except DictKeyAdded as e:
+            raise FieldAddedError(view, e.keys, filename)
+        path = path or []
+
         for field_name, v in response.items():
             if isinstance(v, dict):
-                self._compare_dict(v, stored[field_name], f"{path}_{field_name}", view=view)
+                path.append(field_name)
+                self._compare_dict(v, stored[field_name], path, view=view,
+                                   filename=filename)
             else:
                 asserter = self._get_custom_asserter(path, field_name)
                 if asserter:
@@ -71,29 +81,51 @@ class Recorder:
                         v = list(v)
 
                     if field_name in stored and v != stored[field_name]:
+                        path.append(field_name)
+                        full_path_to_field = ".".join(path)
                         raise FieldValueError(view=view,
                                               expected=stored[field_name],
-                                              receiced=response[field_name],
-                                              field_name=field_name,
+                                              received=response[field_name],
+                                              field_name=full_path_to_field,
                                               filename=self.data_dir)
 
-    def compare(self, response, expected, filename='unknown', ignore_fields=None, view='unknown'):
+    def get_single_record(self, response, expected):
         if isinstance(response, (list, tuple)):
             response = response[0]
             expected = expected[0]
-        if response:
-            _recv = set(response.keys())
-            _expct = set(expected.keys())
-            added = _recv.difference(_expct)
-            missed = _expct.difference(_recv)
+        return response, expected
 
-            if missed:
-                raise FieldMissedError(view, ", ".join(missed))
-            if added:
-                raise FieldAddedError(view, ", ".join(added), filename)
-            self._compare_dict(response, expected, view=view)
+    def check_dict_keys(self, response, expected):
+        _recv = set(response.keys())
+        _expct = set(expected.keys())
+        added = _recv.difference(_expct)
+        missed = _expct.difference(_recv)
+
+        if missed:
+            raise DictKeyMissed(", ".join(missed))
+        if added:
+            raise DictKeyAdded(", ".join(added))
+
+    def compare(self, response, expected, filename='unknown', ignore_fields=None, view='unknown'):
+        if response:
+            if isinstance(response, (list, tuple)):
+                a = response[0]
+                b = expected[0]
+            else:
+                a = response
+                b = expected
+            try:
+                self.check_dict_keys(a, b)
+            except DictKeyMissed as e:
+                raise FieldMissedError(view, e.keys)
+            except DictKeyAdded as e:
+                raise FieldAddedError(view, e.keys, filename)
+
+            response, expected = self.get_single_record(response, expected)
+            self._compare_dict(response, expected, view=view, filename=filename)
         else:
             assert response == expected
+        return True
 
     def assertGET(self, url, *, allow_empty=None, targets=None,
                   expect_errors=None, name=None, data=None, **kwargs):

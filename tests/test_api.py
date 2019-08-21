@@ -13,7 +13,7 @@ from demo.factories import MasterFactory
 from demo.serializers import MasterSerializer
 
 from drf_api_checker.exceptions import FieldAddedError, FieldMissedError
-from drf_api_checker.recorder import Recorder
+from drf_api_checker.recorder import Recorder, FIELDS
 from drf_api_checker.unittest import ApiCheckerBase, ApiCheckerMixin
 
 class MyRecorder(Recorder):
@@ -57,19 +57,19 @@ class DemoApi(ApiCheckerMixin):
                                      "capabilities": []})
 
     def test_b_remove_field(self):
-        self.assertGET(self.url, name='remove_field', check_headers=False)
+        self.assertGET(self.url, name='remove_field', checks=[FIELDS])
         os.environ['API_CHECKER_RESET'] = "" # ignore --reset-contracts
         with mock.patch('demo.serializers.MasterSerializer.Meta.fields', ('name',)):
             with pytest.raises(FieldMissedError):
-                self.assertGET(self.url, name='remove_field', check_headers=False)
+                self.assertGET(self.url, name='remove_field', checks=[FIELDS])
 
     def test_c_add_field(self):
-        self.assertGET(self.url, name='add_field', check_headers=False)
+        self.assertGET(self.url, name='add_field', checks=[FIELDS])
         os.environ['API_CHECKER_RESET'] = "" # ignore --reset-contracts
         with mock.patch('demo.serializers.MasterSerializer.Meta.fields',
                         ('id', 'name', 'alias', 'capabilities', 'timestamp')):
             with pytest.raises(FieldAddedError):
-                self.assertGET(self.url, name='add_field', check_headers=False)
+                self.assertGET(self.url, name='add_field', checks=[FIELDS])
 
     def test_detail(self):
         self.url = reverse("master-detail", args=[self.get_fixture("master").pk])

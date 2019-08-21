@@ -55,7 +55,14 @@ def frozenfixture(func):
     return pytest.fixture(_inner)
 
 
-def contract(recorder_class=Recorder, allow_empty=False, headers=True, status=True, name=None, method='get'):
+def contract(recorder_class=Recorder, allow_empty=False, name=None, method='get', checks=None, **kwargs):
+    if 'headers' in kwargs:
+        raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
+    if 'status' in kwargs:
+        raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
+    if kwargs:
+        raise AttributeError("Unknown arguments %s" % ",".join(kwargs.keys()))
+
     def _inner1(func):
         @wraps(func)
         def _inner(*args, **kwargs):
@@ -68,10 +75,9 @@ def contract(recorder_class=Recorder, allow_empty=False, headers=True, status=Tr
             if isinstance(url, (list, tuple)):
                 url, data = url
             recorder = recorder_class(data_dir)
-            recorder._assertCALL(url, allow_empty=allow_empty,
-                                 check_headers=headers,
-                                 check_status=status,
-                                 name=name, method=method, data=data)
+            recorder.assertCALL(url, allow_empty=allow_empty,
+                                checks=checks,
+                                name=name, method=method, data=data)
             return True
 
         return _inner

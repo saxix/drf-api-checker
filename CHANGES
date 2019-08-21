@@ -1,3 +1,10 @@
+Release 0.7
+-----------
+* improves some customization capabilities
+* deprecate 'check_headers' and `check_status` arguments
+* add ability to determinate checks order: default at [STATUS_CODE, FIELDS, HEADERS]
+
+
 Release 0.6
 -----------
 * fixes compatibility pytest 5.0

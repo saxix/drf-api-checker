@@ -73,7 +73,7 @@ Using ApiCheckerMixin::
             self.assertGET(url)
 
 
-Using ApiCheckerBase metaclass
+Using ApiCheckerBase metaclass::
 
 
     class TestAPIIntervention(TestCase, metaclass=ApiCheckerBase):

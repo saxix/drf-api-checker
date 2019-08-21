@@ -12,7 +12,7 @@ Using ``pip``::
 Go to https://github.com/saxix/drf-api-checker if you need to download a package or clone the repo.
 
 
-|pkg| does not need to be added into ``INSTALLED_APPS`
+|pkg| does not need to be added into ``INSTALLED_APPS``
 
 
 .. _test_suite:

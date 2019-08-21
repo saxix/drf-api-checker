@@ -6,4 +6,4 @@ pytest-cov
 pytest-django
 pytest-echo
 pytest-pythonpath
-
+django

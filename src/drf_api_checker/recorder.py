@@ -135,7 +135,7 @@ class Recorder:
             raise DeprecationWarning("'check_status' has been deprecated. Use 'targets' instead.")
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
-        self.assertCALL(url, allow_empty=allow_empty,
+        return self.assertCALL(url, allow_empty=allow_empty,
                         targets=targets,
                         expect_errors=expect_errors, name=name, data=data)
 
@@ -147,7 +147,7 @@ class Recorder:
             raise DeprecationWarning("'check_status' has been deprecated. Use 'targets' instead.")
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
-        self.assertCALL(url, data=data, method='put', allow_empty=allow_empty,
+        return self.assertCALL(url, data=data, method='put', allow_empty=allow_empty,
                         targets=targets,
                         expect_errors=expect_errors, name=name)
 
@@ -159,7 +159,7 @@ class Recorder:
             raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
-        self.assertCALL(url, data=data, method='post', allow_empty=allow_empty,
+        return self.assertCALL(url, data=data, method='post', allow_empty=allow_empty,
                         check_headers=check_headers, check_status=check_status,
                         expect_errors=expect_errors, name=name)
 
@@ -171,7 +171,7 @@ class Recorder:
             raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
-        self.assertCALL(url, method='delete', allow_empty=allow_empty,
+        return self.assertCALL(url, method='delete', allow_empty=allow_empty,
                         expect_errors=expect_errors, name=name, data=data)
 
     def assertCALL(self, url, *, allow_empty=None,
@@ -221,6 +221,7 @@ class Recorder:
         for check_id in checks:
             check = self.check_map[check_id]
             check(response, stored)
+        return response, stored
 
     def _assert_fields(self, response, stored):
         self.compare(response.data, stored.data, self.filename, view=self.view)

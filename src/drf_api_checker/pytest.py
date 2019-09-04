@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import inspect
+import json
 import os
+import sys
 from functools import wraps
 
 import pytest
@@ -55,7 +57,7 @@ def frozenfixture(func):
     return pytest.fixture(_inner)
 
 
-def contract(recorder_class=Recorder, allow_empty=False, name=None, method='get', checks=None, **kwargs):
+def contract(recorder_class=Recorder, allow_empty=False, name=None, method='get', checks=None, debug=False, **kwargs):
     if 'headers' in kwargs:
         raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
     if 'status' in kwargs:
@@ -75,9 +77,15 @@ def contract(recorder_class=Recorder, allow_empty=False, name=None, method='get'
             if isinstance(url, (list, tuple)):
                 url, data = url
             recorder = recorder_class(data_dir)
-            recorder.assertCALL(url, allow_empty=allow_empty,
+            current, contract = recorder.assertCALL(url, allow_empty=allow_empty,
                                 checks=checks,
                                 name=name, method=method, data=data)
+            if debug:
+                sys.stderr.write("Current Response\n")
+                sys.stderr.write(json.dumps(current.data, indent=4, sort_keys=True))
+                sys.stderr.write("Expected Response\n")
+                sys.stderr.write(json.dumps(contract.data, indent=4, sort_keys=True))
+
             return True
 
         return _inner

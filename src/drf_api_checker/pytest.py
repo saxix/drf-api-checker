@@ -28,8 +28,10 @@ def configure_env(request):
     if option:
         os.environ['API_CHECKER_RESET'] = "1"
 
+
 def default_fixture_name(seed, request):
     return seed + '.fixture.json'
+
 
 def frozenfixture(fixture_name=default_fixture_name):
     def deco(func):

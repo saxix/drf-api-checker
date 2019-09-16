@@ -2,7 +2,9 @@ Release 0.8
 -----------
 * handle OrderedDict
 * BACKWARD INCOMPATIBLE: changed way to create fixtures/cassettes names
+* BACKWARD INCOMPATIBLE: @frozenfixture is now a function decorator.
 * new arg in `frozenfixture` fixture_name
+
 
 Release 0.7
 -----------

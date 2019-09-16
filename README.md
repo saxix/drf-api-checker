@@ -110,7 +110,7 @@ pytest integration is provided by two helpers `frozenfixture` and `contract`::
     from drf_api_checker.pytest import contract, frozenfixture
 
 
-    @frozenfixture
+    @frozenfixture()
     def frozen_detail(db):
         from demo.factories import DetailFactory
         return DetailFactory()

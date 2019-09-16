@@ -41,17 +41,19 @@ New fields are: `{self.field_names}`"""
 
 
 class FieldValueError(ContractError):
-    def __init__(self, view, field_name, expected, received, filename):
+    def __init__(self, view, field_name, expected, received, filename,
+                 message="Field `{0.field_name}` does not match."):
         self.view = view
         self.field_name = field_name
         self.expected = expected
         self.received = received
         self.filename = filename
+        self.message = message.format(self)
 
     def __str__(self) -> str:
-        return rf"""View `{self.view}` breaks the contract.
+        return rf"""View `{self.view}` breaks the contract.        
 Datadir: {self.filename}
-Field `{self.field_name}` does not match.
+{self.message}
 - expected: `{self.expected}`
 - received: `{self.received}`"""
 

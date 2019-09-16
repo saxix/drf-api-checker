@@ -1,3 +1,9 @@
+Release 0.8
+-----------
+* handle OrderedDict
+* BACKWARD INCOMPATIBLE: changed way to create fixtures/cassettes names
+* new arg in `frozenfixture` fixture_name
+
 Release 0.7
 -----------
 * improves some customization capabilities

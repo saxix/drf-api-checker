@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
+from collections import OrderedDict
 
 from django.urls import resolve
 
+import drf_api_checker
 from drf_api_checker.exceptions import (
     FieldAddedError, FieldMissedError, FieldValueError, HeaderError, StatusCodeError,
     DictKeyMissed, DictKeyAdded)
@@ -24,17 +26,15 @@ class Recorder:
     headers = HEADERS_TO_CHECK
     checks = list(DEFAULT_CHECKS)
 
-    def __init__(self, data_dir, owner=None, headers_to_check=None) -> None:
+    def __init__(self, data_dir, owner=None, headers_to_check=None, fixture_file=None) -> None:
         self.data_dir = data_dir
+        self.fixture_file = fixture_file or self.data_dir
         self.owner = owner
         self.headers_to_check = headers_to_check or self.headers
         self.check_map = {FIELDS: self._assert_fields,
                           STATUS_CODE: self._assert_status,
                           HEADERS: self._assert_headers
                           }
-        # self._checks = [check_map[i] for i in self.checks]
-        # self.check_headers = HEADERS in check_map
-        # self.check_status = STATUS_CODE in check_map
         if hasattr(self, 'check_headers'):
             raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
         if hasattr(self, 'check_status'):
@@ -49,7 +49,8 @@ class Recorder:
             return APIClient()
 
     def get_response_filename(self, method, url, data):
-        return get_filename(self.data_dir, clean_url(method, url, data) + '.response.json')
+        return get_filename(self.data_dir,
+                            clean_url(method, url, data) + '.response.json')
 
     def _get_custom_asserter(self, path, field_name):
         for attr in [f'assert_{path}_{field_name}', f'assert_{field_name}']:
@@ -67,27 +68,50 @@ class Recorder:
             raise FieldAddedError(view, e.keys, filename)
         path = path or []
 
-        for field_name, v in response.items():
-            if isinstance(v, dict):
+        for field_name, field_value in response.items():
+            if isinstance(field_value, (dict, OrderedDict)):
                 path.append(field_name)
-                self._compare_dict(v, stored[field_name], path, view=view,
+                self._compare_dict(field_value, stored[field_name], path, view=view,
                                    filename=filename)
             else:
                 asserter = self._get_custom_asserter(path, field_name)
                 if asserter:
                     asserter(response, stored, path)
                 else:
-                    if isinstance(v, set):
-                        v = list(v)
+                    if isinstance(field_value, (set, list, tuple)):
+                        safe_field_value = list(field_value)
+                        stored_field_value = stored[field_name]
+                        if len(safe_field_value) != len(stored_field_value):
+                            raise FieldValueError(view=view,
+                                                  message="Field len `{0.field_name}` does not match.",
+                                                  expected=stored_field_value,
+                                                  received=safe_field_value,
+                                                  field_name=field_name,
+                                                  filename=self.fixture_file)
 
-                    if field_name in stored and v != stored[field_name]:
+                        for i, entry in enumerate(safe_field_value):
+                            if isinstance(entry, (dict, OrderedDict)):
+                                entry = dict(entry)
+                                path.append('%s[%s]' % (field_name, i))
+                                self._compare_dict(entry, stored_field_value[i],
+                                                   path, view=view,
+                                                   filename=self.fixture_file)
+
+                            # if entry != stored_field_value[i]:
+                            #     raise FieldValueError(view=view,
+                            #                           expected=stored_field_value[i],
+                            #                           received=entry,
+                            #                           field_name='%s[%s]' % (field_name, i),
+                            #                           filename=self.data_dir)
+
+                    elif field_name in stored and field_value != stored[field_name]:
                         path.append(field_name)
                         full_path_to_field = ".".join(path)
                         raise FieldValueError(view=view,
                                               expected=stored[field_name],
                                               received=response[field_name],
                                               field_name=full_path_to_field,
-                                              filename=self.data_dir)
+                                              filename=self.fixture_file)
 
     def get_single_record(self, response, expected):
         if isinstance(response, (list, tuple)):

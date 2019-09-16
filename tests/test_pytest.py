@@ -9,8 +9,8 @@ class MyRecorder(Recorder):
         assert response
 
 
-@frozenfixture
-def frozen_detail(db):
+@frozenfixture()
+def frozen_detail(request, db):
     from demo.factories import DetailFactory
     return DetailFactory()
 

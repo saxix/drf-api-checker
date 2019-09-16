@@ -60,3 +60,23 @@ Check methods other than GET
     from drf_api_checker.pytest import contract, frozenfixture
 
 
+
+Change the name of frozenfixture filename
+-----------------------------------------
+
+.. code-block:: python
+
+    def get_fixture_name(seed, request):
+        viewset = request.getfixturevalue('viewset')
+        url = viewset.get_service().endpoint.strip('.').replace('/', '_')
+        return os.path.join(seed, url) + '.fixture.json'
+
+
+    @frozenfixture(fixture_name=get_fixture_name)
+    def data(db, request):
+        viewset = request.getfixturevalue('viewset')
+        factory = factories_registry[viewset.serializer_class.Meta.model]
+        data = (factory(schema_name='bolivia'),
+                factory(schema_name='chad'),
+                factory(schema_name='lebanon'))
+        return data

@@ -1,0 +1,68 @@
+{
+    "status_code": 200,
+    "headers": {
+        "content-type": [
+            "Content-Type",
+            "application/json"
+        ],
+        "vary": [
+            "Vary",
+            "Accept, Cookie"
+        ],
+        "allow": [
+            "Allow",
+            "PUT, PATCH, OPTIONS"
+        ],
+        "x-frame-options": [
+            "X-Frame-Options",
+            "SAMEORIGIN"
+        ],
+        "content-length": [
+            "Content-Length",
+            "534"
+        ]
+    },
+    "data": {
+        "name": "Master Update Api",
+        "description": "",
+        "renders": [
+            "application/json",
+            "text/html"
+        ],
+        "parses": [
+            "application/json",
+            "application/x-www-form-urlencoded",
+            "multipart/form-data"
+        ],
+        "actions": {
+            "PUT": {
+                "id": {
+                    "type": "integer",
+                    "required": false,
+                    "read_only": true,
+                    "label": "ID"
+                },
+                "name": {
+                    "type": "string",
+                    "required": true,
+                    "read_only": false,
+                    "label": "Name",
+                    "max_length": 100
+                },
+                "capabilities": {
+                    "type": "field",
+                    "required": false,
+                    "read_only": false,
+                    "label": "Capabilities"
+                },
+                "timestamp": {
+                    "type": "datetime",
+                    "required": false,
+                    "read_only": true,
+                    "label": "Timestamp"
+                }
+            }
+        }
+    },
+    "content_type": null
+}

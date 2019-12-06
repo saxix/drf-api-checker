@@ -7,10 +7,10 @@ import re
 from setuptools import find_packages, setup
 
 ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__)))
-init = os.path.join(ROOT, 'src', 'drf_api_checker', '__init__.py')
+init = os.path.join(ROOT, 'pyproject.toml')
 
-_version_re = re.compile(r'__version__\s+=\s+(.*)')
-_name_re = re.compile(r'NAME\s+=\s+(.*)')
+_version_re = re.compile(r'version\s+=\s+(.*)')
+_name_re = re.compile(r'name\s+=\s+(.*)')
 
 with open(init, 'rb') as f:
     content = f.read().decode('utf-8')

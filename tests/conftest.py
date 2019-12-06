@@ -13,6 +13,7 @@ def pytest_configure(config):
 @pytest.fixture(autouse=True)
 def setup_recorder(monkeypatch):
     import django
+    import drf_api_checker.pytest
     v = ".".join(map(str, django.VERSION[0:2]))
     target = f"_api_checker_{v}"
     monkeypatch.setattr('drf_api_checker.recorder.BASE_DATADIR', target)

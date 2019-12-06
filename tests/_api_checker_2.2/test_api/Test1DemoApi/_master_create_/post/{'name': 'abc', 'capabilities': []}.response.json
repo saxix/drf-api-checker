@@ -1,0 +1,32 @@
+{
+    "status_code": 201,
+    "headers": {
+        "content-type": [
+            "Content-Type",
+            "application/json"
+        ],
+        "vary": [
+            "Vary",
+            "Accept, Cookie"
+        ],
+        "allow": [
+            "Allow",
+            "POST, OPTIONS"
+        ],
+        "x-frame-options": [
+            "X-Frame-Options",
+            "SAMEORIGIN"
+        ],
+        "content-length": [
+            "Content-Length",
+            "80"
+        ]
+    },
+    "data": {
+        "id": 2,
+        "name": "abc",
+        "capabilities": [],
+        "timestamp": "2019-09-16T13:58:20.961983"
+    },
+    "content_type": null
+}

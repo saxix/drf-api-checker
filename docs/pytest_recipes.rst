@@ -98,3 +98,20 @@ Use pytest.parametrize
         recorder = MyRecorder(api_checker_datadir)
         recorder.assertCALL(url, method=method)
 
+
+
+Authenticate client with different users
+----------------------------------------
+
+*pseudo-code*
+
+.. code-block:: python
+
+    @pytest.mark.parametrize("permission", ['can_read', 'can_write'])
+    def test_parametrize(frozen_detail, api_checker_datadir, permission):
+        url = reverse("master-list")
+        user = UserFactory()
+        with user_grant_permissions(user, [permission])
+            recorder = MyRecorder(api_checker_datadir, as_user=user):
+            recorder.assertCALL(url, method=method)
+

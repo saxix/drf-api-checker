@@ -156,28 +156,28 @@ class Recorder:
             assert response == expected
         return True
 
-    def assertGET(self, url, *, allow_empty=None, targets=None,
+    def assertGET(self, url, *, allow_empty=None, checks=None,
                   expect_errors=None, name=None, data=None, **kwargs):
         if 'check_headers' in kwargs:
-            raise DeprecationWarning("'check_headers' has been deprecated. Use 'targets' instead.")
+            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
         if 'check_status' in kwargs:
-            raise DeprecationWarning("'check_status' has been deprecated. Use 'targets' instead.")
+            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
         return self.assertCALL(url, allow_empty=allow_empty,
-                               targets=targets,
+                               checks=checks,
                                expect_errors=expect_errors, name=name, data=data)
 
     def assertPUT(self, url, data, *, allow_empty=None,
-                  expect_errors=None, name=None, targets=None, **kwargs):
+                  expect_errors=None, name=None, checks=None, **kwargs):
         if 'check_headers' in kwargs:
-            raise DeprecationWarning("'check_headers' has been deprecated. Use 'targets' instead.")
+            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
         if 'check_status' in kwargs:
-            raise DeprecationWarning("'check_status' has been deprecated. Use 'targets' instead.")
+            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
         return self.assertCALL(url, data=data, method='put', allow_empty=allow_empty,
-                               targets=targets,
+                               checks=checks,
                                expect_errors=expect_errors, name=name)
 
     def assertPOST(self, url, data, *, allow_empty=None, check_headers=None, check_status=None,
@@ -189,10 +189,10 @@ class Recorder:
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
         return self.assertCALL(url, data=data, method='post', allow_empty=allow_empty,
-                               check_headers=check_headers, check_status=check_status,
+                               checks=checks,
                                expect_errors=expect_errors, name=name)
 
-    def assertDELETE(self, url, *, allow_empty=None,
+    def assertDELETE(self, url, *, allow_empty=None, checks=None,
                      expect_errors=None, name=None, data=None, **kwargs):
         if 'check_headers' in kwargs:
             raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
@@ -201,6 +201,7 @@ class Recorder:
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
         return self.assertCALL(url, method='delete', allow_empty=allow_empty,
+                               checks=checks,
                                expect_errors=expect_errors, name=name, data=data)
 
     def assertCALL(self, url, *, allow_empty=None,

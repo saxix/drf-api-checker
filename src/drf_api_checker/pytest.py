@@ -38,28 +38,20 @@ def default_fixture_name(seed, request):
     return seed + '.fixture.json'
 
 
-def frozenfixture(fixture_name=default_fixture_name):
+def frozenfixture(fixture_name=default_fixture_name, is_fixture=True):
     def deco(func):
         from drf_api_checker.utils import load_fixtures, dump_fixtures
         from drf_api_checker.fs import mktree
 
         @wraps(func)
         def _inner(*args, **kwargs):
-            if 'request' not in kwargs:
+            if is_fixture and 'request' not in kwargs:
                 raise ValueError('frozenfixture must have `request` argument')
-            request = kwargs['request']
+            request = kwargs.get('request', None)
             parts = [os.path.dirname(func.__code__.co_filename),
                      BASE_DATADIR,
                      func.__module__,
                      func.__name__]
-            # for x in (fixture_names or []):
-            #     if callable(x):
-            #         part = x(request)
-            #     else:
-            #         part = request.getfixturevalue(x)
-            #     parts.append(part.__name__)
-            #
-            # destination = os.path.join(*parts) + '.fixture.json'
             seed = os.path.join(*parts)
             destination = fixture_name(seed, request)
 
@@ -69,7 +61,9 @@ def frozenfixture(fixture_name=default_fixture_name):
                 dump_fixtures({func.__name__: data}, destination)
             return load_fixtures(destination)[func.__name__]
 
-        return pytest.fixture(_inner)
+        if is_fixture:
+            return pytest.fixture(_inner)
+        return _inner
 
     return deco
 

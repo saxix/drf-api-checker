@@ -1,8 +1,0 @@
-django_webtest
-factory-boy
-pyfakefs
-pytest
-pytest-cov
-pytest-django
-pytest-echo
-pytest-pythonpath

@@ -142,6 +142,18 @@ custom asserter is a method named `assert_<field_name>`, in case of nested seria
 you can have more specific asserter using `assert_<fk_field_name>_<field_name>`
 
 
+Contributing
+------------
+
+This project uses [poetry](https://python-poetry.org/docs/versions/) as package manager. It does not contains `setup.py`. 
+To setup the development environment and run tests you should:
+
+    poetry install
+    poetry run tox
+    
+To activate  
+    
+
 Links
 -----
 

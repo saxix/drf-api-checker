@@ -20,5 +20,4 @@ pytest.xml
 ~*
 .project
 .pydevproject
-pyproject.toml
 poetry.lock

@@ -124,7 +124,7 @@ pytest integration is provided by two helpers `frozenfixture` and `contract`::
 Custom checks:
 --------------
 
-Sometimes it is not possible to check a field by value, but exists anyway a mechanism 
+Sometimes it is not possible to check a field by value,  but exists anyway a mechanism 
 to check the contract (ie. `timestamp` field - _ignore for this example tools like [freezegun](https://github.com/spulec/freezegun)_)
 
 To handle these situations you can write custom `Recorder` with custom `asserters`:

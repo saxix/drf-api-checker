@@ -20,7 +20,7 @@ matrix:
       env: DJANGO=1.11
 
 install:
-  - pip install tox codecov
+  - pip install tox codecov poetry
 
 script:
   - tox -e "py${TRAVIS_PYTHON_VERSION//.}-d${DJANGO//.}"

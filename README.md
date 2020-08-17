@@ -124,10 +124,10 @@ pytest integration is provided by two helpers `frozenfixture` and `contract`::
 Custom checks:
 --------------
 
-Sometimes it is not possible to check a field by value but exists anyway a mechanism 
+Sometimes it is not possible to check a field by value,  but exists anyway a mechanism 
 to check the contract (ie. `timestamp` field - _ignore for this example tools like [freezegun](https://github.com/spulec/freezegun)_)
 
-To handle this situations you can write custom `Recorder` with specia `asserters`:
+To handle these situations you can write custom `Recorder` with custom `asserters`:
 
 
     from drf_api_checker.recorder import Recorder
@@ -141,6 +141,18 @@ To handle this situations you can write custom `Recorder` with specia `asserters
 custom asserter is a method named `assert_<field_name>`, in case of nested serializers
 you can have more specific asserter using `assert_<fk_field_name>_<field_name>`
 
+
+Contributing
+------------
+
+This project uses [poetry](https://python-poetry.org/docs/versions/) as package manager. It does not contains `setup.py`. 
+To setup the development environment and run tests you should:
+
+    poetry install
+    poetry run tox
+    
+To activate  
+    
 
 Links
 -----

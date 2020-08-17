@@ -59,6 +59,10 @@ Check methods other than GET
     from drf_api_checker.recorder import Recorder
     from drf_api_checker.pytest import contract, frozenfixture
 
+    @contract(recorder_class=MyRecorder, method='post')
+    def test_url_post(frozen_detail):
+        url = reverse("master-create")
+        return url, {"name": "name1"}
 
 
 Change the name of frozenfixture filename
@@ -80,3 +84,34 @@ Change the name of frozenfixture filename
                 factory(schema_name='chad'),
                 factory(schema_name='lebanon'))
         return data
+
+
+
+Use pytest.parametrize
+----------------------
+
+.. code-block:: python
+
+    @pytest.mark.parametrize("method", ['get', 'options'])
+    def test_parametrize(frozen_detail, api_checker_datadir, method):
+        url = reverse("master-list")
+        recorder = MyRecorder(api_checker_datadir)
+        recorder.assertCALL(url, method=method)
+
+
+
+Authenticate client with different users
+----------------------------------------
+
+*pseudo-code*
+
+.. code-block:: python
+
+    @pytest.mark.parametrize("permission", ['can_read', 'can_write'])
+    def test_parametrize(frozen_detail, api_checker_datadir, permission):
+        url = reverse("master-list")
+        user = UserFactory()
+        with user_grant_permissions(user, [permission])
+            recorder = MyRecorder(api_checker_datadir, as_user=user):
+            recorder.assertCALL(url, method=method)
+

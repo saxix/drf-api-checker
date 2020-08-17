@@ -29,6 +29,11 @@ def configure_env(request):
         os.environ['API_CHECKER_RESET'] = "1"
 
 
+@pytest.fixture()
+def api_checker_datadir(request):
+    return get_data_dir(request.function)
+
+
 def default_fixture_name(seed, request):
     return seed + '.fixture.json'
 
@@ -69,21 +74,20 @@ def frozenfixture(fixture_name=default_fixture_name):
     return deco
 
 
+def get_data_dir(func):
+    return os.path.join(os.path.dirname(inspect.getfile(func)),
+                        BASE_DATADIR,
+                        func.__module__, func.__name__)
+
+
 def contract(recorder_class=Recorder, allow_empty=False, name=None, method='get', checks=None, debug=False, **kwargs):
-    if 'headers' in kwargs:
-        raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
-    if 'status' in kwargs:
-        raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
     if kwargs:
         raise AttributeError("Unknown arguments %s" % ",".join(kwargs.keys()))
 
     def _inner1(func):
         @wraps(func)
         def _inner(*args, **kwargs):
-            data_dir = os.path.join(os.path.dirname(inspect.getfile(func)),
-                                    BASE_DATADIR,
-                                    func.__module__, func.__name__)
-
+            data_dir = get_data_dir(func)
             data = None
             url = func(*args, **kwargs)
             if isinstance(url, (list, tuple)):

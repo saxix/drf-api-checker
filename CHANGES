@@ -1,3 +1,18 @@
+Release 0.9
+-----------
+* add ability to invoke `frozenfixture` manually
+
+
+Release 0.8.2
+-------------
+* bug fixes
+
+
+Release 0.8.1
+-------------
+* bug fixes
+
+
 Release 0.8
 -----------
 * handle OrderedDict

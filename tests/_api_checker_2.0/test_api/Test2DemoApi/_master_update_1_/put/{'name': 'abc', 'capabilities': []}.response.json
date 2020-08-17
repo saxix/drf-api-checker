@@ -1,0 +1,32 @@
+{
+    "status_code": 200,
+    "headers": {
+        "content-type": [
+            "Content-Type",
+            "application/json"
+        ],
+        "vary": [
+            "Vary",
+            "Accept, Cookie"
+        ],
+        "allow": [
+            "Allow",
+            "PUT, PATCH, OPTIONS"
+        ],
+        "x-frame-options": [
+            "X-Frame-Options",
+            "SAMEORIGIN"
+        ],
+        "content-length": [
+            "Content-Length",
+            "80"
+        ]
+    },
+    "data": {
+        "id": 1,
+        "name": "abc",
+        "capabilities": [],
+        "timestamp": "2019-12-06T06:21:28.980871"
+    },
+    "content_type": null
+}

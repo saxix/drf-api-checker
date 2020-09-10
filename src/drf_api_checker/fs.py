@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import hashlib
 import os
 
 
@@ -18,6 +19,8 @@ def mktree(newdir):
 
 
 def clean_url(method, url, data=''):
+    if not isinstance(data, (str, bytes)):
+        data = hashlib.sha256(str(data).encode()).hexdigest()
     return f"{url.strip('.').replace('/', '_')}/{method}/{str(data)}"
 
 

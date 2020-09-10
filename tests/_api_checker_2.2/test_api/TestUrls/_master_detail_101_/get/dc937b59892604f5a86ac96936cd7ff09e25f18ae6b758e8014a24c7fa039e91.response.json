@@ -1,0 +1,32 @@
+{
+    "status_code": 200,
+    "headers": {
+        "content-type": [
+            "Content-Type",
+            "application/json"
+        ],
+        "vary": [
+            "Vary",
+            "Accept, Cookie"
+        ],
+        "allow": [
+            "Allow",
+            "GET, HEAD, OPTIONS"
+        ],
+        "x-frame-options": [
+            "X-Frame-Options",
+            "SAMEORIGIN"
+        ],
+        "content-length": [
+            "Content-Length",
+            "87"
+        ]
+    },
+    "data": {
+        "id": 101,
+        "name": "Name 014",
+        "capabilities": [],
+        "timestamp": "2020-09-10T10:34:51.429908"
+    },
+    "content_type": null
+}

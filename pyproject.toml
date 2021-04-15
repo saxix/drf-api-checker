@@ -21,6 +21,7 @@ pytest-echo = "^1.6"
 pytest-pythonpath = "^0.7.3"
 pdbpp = "^0.10.2"
 sphinx = "^3.2.1"
+tox-poetry = {extras = ["poetry"], version = "^0.3.0"}
 
 [build-system]
 requires = ["poetry"]

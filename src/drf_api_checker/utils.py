@@ -99,10 +99,10 @@ def serialize_response(response):
 def load_response(file_or_stream):
     from rest_framework.response import Response
 
-    c = json.loads(_read(file_or_stream))
-    r = Response(c['data'],
-                 status=c['status_code'],
-                 content_type=c['content_type'])
-    r._is_rendered = True
-    r._headers = c['headers']
-    return r
+    context = json.loads(_read(file_or_stream))
+    response = Response(context['data'],
+                 status=context['status_code'],
+                 content_type=context['content_type'])
+    response._is_rendered = True
+    response._headers = context['headers']
+    return response

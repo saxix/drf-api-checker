@@ -262,11 +262,11 @@ class Recorder:
 
     def _assert_headers(self, response, stored):
 
-        for h in self.headers_to_check:
-            _expected = stored.get(h)
-            _recv = response.get(h)
+        for header in self.headers_to_check:
+            _expected = stored.get(header)
+            _recv = response.get(header)
             if _expected != _recv:
-                raise HeaderError(self.view, h, _expected,
+                raise HeaderError(self.view, header, _expected,
                                   _recv,
                                   self.filename,
                                   f"{stored.content}/{response.content}")

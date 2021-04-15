@@ -1,5 +1,11 @@
+Release 0.11
+------------
+* add support Python 3.9
+* drop support Django < 2.2
+
+
 Release 0.10
------------
+------------
 * fixes #4 - Windows Filename Incompatibility
 * drop support Django < 2.x
 

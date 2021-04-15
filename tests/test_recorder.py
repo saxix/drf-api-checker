@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import pytest
 
 from drf_api_checker.exceptions import FieldAddedError, FieldMissedError, FieldValueError

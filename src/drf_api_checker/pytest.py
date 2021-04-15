@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import inspect
 import json
 import os
@@ -40,8 +39,8 @@ def default_fixture_name(seed, request):
 
 def frozenfixture(fixture_name=default_fixture_name):
     def deco(func):
-        from drf_api_checker.utils import load_fixtures, dump_fixtures
         from drf_api_checker.fs import mktree
+        from drf_api_checker.utils import dump_fixtures, load_fixtures
 
         @wraps(func)
         def _inner(*args, **kwargs):

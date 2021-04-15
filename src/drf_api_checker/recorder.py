@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
 import os
 from collections import OrderedDict
 
 from django.urls import resolve
 
 import drf_api_checker
-from drf_api_checker.exceptions import (
-    FieldAddedError, FieldMissedError, FieldValueError, HeaderError, StatusCodeError,
-    DictKeyMissed, DictKeyAdded)
+from drf_api_checker.exceptions import (DictKeyAdded, DictKeyMissed,
+                                        FieldAddedError, FieldMissedError,
+                                        FieldValueError, HeaderError,
+                                        StatusCodeError)
 from drf_api_checker.fs import clean_url, get_filename
 from drf_api_checker.utils import _write, load_response, serialize_response
 

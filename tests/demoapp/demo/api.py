@@ -1,6 +1,6 @@
-from rest_framework.generics import (
-    CreateAPIView, DestroyAPIView, ListCreateAPIView, RetrieveAPIView, UpdateAPIView
-)
+from rest_framework.generics import (CreateAPIView, DestroyAPIView,
+                                     ListCreateAPIView, RetrieveAPIView,
+                                     UpdateAPIView)
 
 from .models import Master
 from .serializers import MasterSerializer

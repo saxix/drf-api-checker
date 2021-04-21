@@ -1,26 +1,24 @@
 import datetime
 import os
-import tempfile
 from unittest import mock
 
 import pytest
+from demo.factories import MasterFactory
+from demo.serializers import MasterSerializer
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework.response import Response
 
-from demo.factories import MasterFactory
-from demo.serializers import MasterSerializer
-
 from drf_api_checker.exceptions import FieldAddedError, FieldMissedError
-from drf_api_checker.recorder import Recorder, FIELDS
+from drf_api_checker.recorder import FIELDS, Recorder
 from drf_api_checker.unittest import ApiCheckerBase, ApiCheckerMixin
+
 
 class MyRecorder(Recorder):
     def assert_timestamp(self, response: Response, stored: Response, path: str):
         # only check datetime format
         value = response['timestamp']
         assert datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
-
 
 
 class DemoApi(ApiCheckerMixin):
@@ -38,7 +36,7 @@ class DemoApi(ApiCheckerMixin):
         self.assertGET(self.url)
 
     def test_a_base_allow_empty(self):
-        self.assertGET(self.url, allow_empty=True, data={"a":1})
+        self.assertGET(self.url, allow_empty=True, data={"a": 1})
 
     def test_a_put(self):
         self.url = reverse("master-update", args=[self.get_fixture("master").pk])
@@ -57,14 +55,14 @@ class DemoApi(ApiCheckerMixin):
 
     def test_b_remove_field(self):
         self.assertGET(self.url, name='remove_field', checks=[FIELDS])
-        os.environ['API_CHECKER_RESET'] = "" # ignore --reset-contracts
+        os.environ['API_CHECKER_RESET'] = ""  # ignore --reset-contracts
         with mock.patch('demo.serializers.MasterSerializer.Meta.fields', ('name',)):
             with pytest.raises(FieldMissedError):
                 self.assertGET(self.url, name='remove_field', checks=[FIELDS])
 
     def test_c_add_field(self):
         self.assertGET(self.url, name='add_field', checks=[FIELDS])
-        os.environ['API_CHECKER_RESET'] = "" # ignore --reset-contracts
+        os.environ['API_CHECKER_RESET'] = ""  # ignore --reset-contracts
         with mock.patch('demo.serializers.MasterSerializer.Meta.fields',
                         ('id', 'name', 'alias', 'capabilities', 'timestamp')):
             with pytest.raises(FieldAddedError):

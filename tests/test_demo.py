@@ -1,5 +1,4 @@
 import pytest
-
 from demo.models import Master
 
 

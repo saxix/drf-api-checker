@@ -1,23 +1,24 @@
+dist: xenial
 language: python
 sudo: false
 python:
   - 3.6
   - 3.7
   - 3.8
+  - 3.9
 
 
 env:
-  - DJANGO=1.11
-  - DJANGO=2.0
-  - DJANGO=2.1
-  - DJANGO=2.2
-  - DJANGO=3.0
+  global:
+    - CRYPTOGRAPHY_DONT_BUILD_RUST=1
+  jobs:
+    - DJANGO=2.2
+    - DJANGO=3.0
+    - DJANGO=3.1
 
 
-matrix:
-  exclude:
-    - python: 3.8
-      env: DJANGO=1.11
+before_install:
+  - curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 install:
   - pip install tox codecov

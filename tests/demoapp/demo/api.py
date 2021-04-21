@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from rest_framework.generics import (
     CreateAPIView, DestroyAPIView, ListCreateAPIView, RetrieveAPIView, UpdateAPIView
 )

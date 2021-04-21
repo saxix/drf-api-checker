@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
 import os
 from collections import OrderedDict
 
 from django.urls import resolve
 
 import drf_api_checker
-from drf_api_checker.exceptions import (
-    FieldAddedError, FieldMissedError, FieldValueError, HeaderError, StatusCodeError,
-    DictKeyMissed, DictKeyAdded)
+from drf_api_checker.exceptions import (DictKeyAdded, DictKeyMissed,
+                                        FieldAddedError, FieldMissedError,
+                                        FieldValueError, HeaderError,
+                                        StatusCodeError)
 from drf_api_checker.fs import clean_url, get_filename
 from drf_api_checker.utils import _write, load_response, serialize_response
 
@@ -262,11 +262,11 @@ class Recorder:
 
     def _assert_headers(self, response, stored):
 
-        for h in self.headers_to_check:
-            _expected = stored.get(h)
-            _recv = response.get(h)
+        for header in self.headers_to_check:
+            _expected = stored.get(header)
+            _recv = response.get(header)
             if _expected != _recv:
-                raise HeaderError(self.view, h, _expected,
+                raise HeaderError(self.view, header, _expected,
                                   _recv,
                                   self.filename,
                                   f"{stored.content}/{response.content}")

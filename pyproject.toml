@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "drf-api-checker"
-version = "0.10.0"
+version = "0.11.0"
 description = ""
 authors = ["sax <s.apostolico@gmail.com>"]
 license = "MIT"

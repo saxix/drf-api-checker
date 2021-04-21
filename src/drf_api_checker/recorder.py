@@ -1,6 +1,7 @@
 import os
 from collections import OrderedDict
 
+from django import VERSION as dj_version
 from django.urls import resolve
 
 import drf_api_checker
@@ -263,7 +264,8 @@ class Recorder:
     def _assert_headers(self, response, stored):
 
         for header in self.headers_to_check:
-            _expected = stored.get(header)
+            stored_headers = stored if dj_version < (3, 2) else stored.headers
+            _expected = stored_headers.get(header)
             _recv = response.get(header)
             if _expected != _recv:
                 raise HeaderError(self.view, header, _expected,

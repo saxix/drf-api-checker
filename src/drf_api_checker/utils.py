@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
 import calendar
 import datetime
 import json
 
+from django import VERSION as dj_version
 from django.core import serializers as ser
 from django.db import DEFAULT_DB_ALIAS
 
@@ -11,6 +11,10 @@ from .collector import ForeignKeysCollector
 
 class ResponseEncoder(json.JSONEncoder):
     def default(self, obj):
+        if dj_version >= (3, 2):
+            from django.http.response import ResponseHeaders
+            if isinstance(obj, ResponseHeaders):
+                return dict(obj)
         if isinstance(obj, set):
             return list(obj)
         elif isinstance(obj, datetime.datetime):
@@ -89,21 +93,32 @@ def load_fixtures(file, ignorenonexistent=False, using=DEFAULT_DB_ALIAS):
 
 
 def serialize_response(response):
-    data = {'status_code': response.status_code,
-            'headers': response._headers,
-            'data': response.data,
-            'content_type': response.content_type,
-            }
+    if dj_version < (3, 2):
+        headers = response._headers
+        content_type = response._headers['content-type'][1] if 'content-type' in response._headers else None
+    else:
+        headers = response.headers
+        content_type = response.headers['content-type'] if 'content-type' in response.headers else None
+    data = {
+        'status_code': response.status_code,
+        'headers': headers,
+        'data': response.data,
+        'content_type': content_type,
+    }
     return json.dumps(data, indent=4, cls=ResponseEncoder).encode('utf8')
 
 
 def load_response(file_or_stream):
     from rest_framework.response import Response
 
-    c = json.loads(_read(file_or_stream))
-    r = Response(c['data'],
-                 status=c['status_code'],
-                 content_type=c['content_type'])
-    r._is_rendered = True
-    r._headers = c['headers']
-    return r
+    context = json.loads(_read(file_or_stream))
+    response = Response(context['data'],
+                    status=context['status_code'],
+                    content_type=context['content_type']
+                    )
+    response._is_rendered = True
+    if dj_version < (3, 2):
+        response._headers = context['headers']
+    else:
+        response.headers = context['headers']
+    return response

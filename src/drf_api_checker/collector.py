@@ -1,13 +1,12 @@
-# -*- coding: utf-8 -*-
 from itertools import chain
 
 from django.db.models import ForeignKey, ManyToManyField
 
 
-class ForeignKeysCollector(object):
+class ForeignKeysCollector:
     def __init__(self, using):
         self._visited = []
-        super(ForeignKeysCollector, self).__init__()
+        super().__init__()
 
     def _collect(self, objs):
         objects = []

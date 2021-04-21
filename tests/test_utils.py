@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import json
 import os
 from datetime import datetime
@@ -10,9 +9,8 @@ from dateutil.utils import today
 from rest_framework.response import Response
 
 from drf_api_checker.fs import mktree
-from drf_api_checker.utils import (
-    _read, _write, dump_fixtures, load_fixtures, load_response, serialize_response
-)
+from drf_api_checker.utils import (_read, _write, dump_fixtures, load_fixtures,
+                                   load_response, serialize_response)
 
 
 def test_mktree(tmpdir):

@@ -2,6 +2,7 @@ import os
 from collections import OrderedDict
 
 from django import VERSION as dj_version
+from django.conf import settings
 from django.urls import resolve
 
 import drf_api_checker
@@ -13,8 +14,18 @@ from drf_api_checker.fs import clean_url, get_filename
 from drf_api_checker.utils import _write, load_response, serialize_response
 
 HEADERS_TO_CHECK = ['Content-Type', 'Content-Length', 'Allow']
-BASE_DATADIR = '_api_checker'
 
+
+def get_base_dir():
+    import django
+    if hasattr(settings, 'BY_DJANGO_VERSION') and settings.BY_DJANGO_VERSION:
+        v = ".".join(map(str, django.VERSION[0:2]))
+        return f"_api_checker_{v}"
+    else:
+        return '_api_checker'
+
+
+BASE_DATADIR = get_base_dir()
 STATUS_CODE = 1
 FIELDS = 2
 HEADERS = 3

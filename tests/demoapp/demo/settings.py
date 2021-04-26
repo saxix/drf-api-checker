@@ -88,3 +88,5 @@ DATABASES = {
         'NAME': "db.sqlite",
     }
 }
+
+BY_DJANGO_VERSION = True

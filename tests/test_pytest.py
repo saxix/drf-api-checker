@@ -1,7 +1,7 @@
 import pytest
 from django.urls import reverse
 
-from drf_api_checker.pytest import api_checker_datadir, contract, frozenfixture
+from drf_api_checker.pytest import contract, frozenfixture
 from drf_api_checker.recorder import Recorder
 
 

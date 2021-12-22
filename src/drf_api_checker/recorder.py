@@ -5,7 +5,6 @@ from django import VERSION as dj_version
 from django.conf import settings
 from django.urls import resolve
 
-import drf_api_checker
 from drf_api_checker.exceptions import (DictKeyAdded, DictKeyMissed,
                                         FieldAddedError, FieldMissedError,
                                         FieldValueError, HeaderError,

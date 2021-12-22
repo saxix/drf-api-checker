@@ -50,7 +50,7 @@ class FieldValueError(ContractError):
         self.message = message.format(self)
 
     def __str__(self) -> str:
-        return rf"""View `{self.view}` breaks the contract.        
+        return rf"""View `{self.view}` breaks the contract.
 Datadir: {self.filename}
 {self.message}
 - expected: `{self.expected}`

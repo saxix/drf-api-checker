@@ -9,7 +9,7 @@ license = "MIT"
 python = "^3.9"
 djangorestframework = "^3.12"
 pytz = "*"
-django = "*"
+Django = "*"
 
 [tool.poetry.dev-dependencies]
 django-webtest = "^1.9"

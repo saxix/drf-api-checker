@@ -113,9 +113,9 @@ def load_response(file_or_stream):
 
     context = json.loads(_read(file_or_stream))
     response = Response(context['data'],
-                    status=context['status_code'],
-                    content_type=context['content_type']
-                    )
+                        status=context['status_code'],
+                        content_type=context['content_type']
+                        )
     response._is_rendered = True
     if dj_version < (3, 2):
         response._headers = context['headers']

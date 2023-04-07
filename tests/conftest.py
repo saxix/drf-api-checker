@@ -7,10 +7,10 @@ import pytest
 
 def pytest_configure(config):
     here = os.path.dirname(__file__)
-    sys.path.insert(0, str(Path(here) / 'demoapp'))
+    sys.path.insert(0, str(Path(here) / "demoapp"))
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def client(request):
     import django_webtest
 
@@ -25,22 +25,26 @@ def client(request):
 @pytest.fixture
 def master(db):
     from demo.factories import MasterFactory
+
     return MasterFactory()
 
 
 @pytest.fixture
 def detail(master):
     from demo.factories import DetailFactory
+
     return DetailFactory(master=master)
 
 
 @pytest.fixture
 def masters(db):
     from demo.factories import MasterFactory
+
     return MasterFactory(), MasterFactory()
 
 
 @pytest.fixture
 def details(db):
     from demo.factories import DetailFactory
+
     return DetailFactory(), DetailFactory()

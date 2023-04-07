@@ -28,11 +28,12 @@ class ForeignKeysCollector:
         return objects
 
     def collect(self, obj):
-        if not hasattr(obj, '__iter__'):
+        if not hasattr(obj, "__iter__"):
             obj = [obj]
         self._visited = []
         self.data = self._collect(obj)
         self.models = set([o.__class__ for o in self.data])
+
     #
     # def __str__(self):
     #     return mark_safe(self.data)

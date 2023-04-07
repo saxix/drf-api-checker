@@ -17,8 +17,8 @@ from drf_api_checker.unittest import ApiCheckerBase, ApiCheckerMixin
 class MyRecorder(Recorder):
     def assert_timestamp(self, response: Response, stored: Response, path: str):
         # only check datetime format
-        value = response['timestamp']
-        assert datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
+        value = response["timestamp"]
+        assert datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
 
 
 class DemoApi(ApiCheckerMixin):
@@ -40,33 +40,32 @@ class DemoApi(ApiCheckerMixin):
 
     def test_a_put(self):
         self.url = reverse("master-update", args=[self.get_fixture("master").pk])
-        self.assertPUT(self.url, {"name": 'abc',
-                                  "capabilities": []})
+        self.assertPUT(self.url, {"name": "abc", "capabilities": []})
 
     def test_a_post(self):
         self.url = reverse("master-create")
-        self.assertPOST(self.url, {"name": 'abc',
-                                   "capabilities": []})
+        self.assertPOST(self.url, {"name": "abc", "capabilities": []})
 
     def test_a_delete(self):
         self.url = reverse("master-delete", args=[self.get_fixture("master").pk])
-        self.assertDELETE(self.url, {"name": 'abc',
-                                     "capabilities": []})
+        self.assertDELETE(self.url, {"name": "abc", "capabilities": []})
 
     def test_b_remove_field(self):
-        self.assertGET(self.url, name='remove_field', checks=[FIELDS])
-        os.environ['API_CHECKER_RESET'] = ""  # ignore --reset-contracts
-        with mock.patch('demo.serializers.MasterSerializer.Meta.fields', ('name',)):
+        self.assertGET(self.url, name="remove_field", checks=[FIELDS])
+        os.environ["API_CHECKER_RESET"] = ""  # ignore --reset-contracts
+        with mock.patch("demo.serializers.MasterSerializer.Meta.fields", ("name",)):
             with pytest.raises(FieldMissedError):
-                self.assertGET(self.url, name='remove_field', checks=[FIELDS])
+                self.assertGET(self.url, name="remove_field", checks=[FIELDS])
 
     def test_c_add_field(self):
-        self.assertGET(self.url, name='add_field', checks=[FIELDS])
-        os.environ['API_CHECKER_RESET'] = ""  # ignore --reset-contracts
-        with mock.patch('demo.serializers.MasterSerializer.Meta.fields',
-                        ('id', 'name', 'alias', 'capabilities', 'timestamp')):
+        self.assertGET(self.url, name="add_field", checks=[FIELDS])
+        os.environ["API_CHECKER_RESET"] = ""  # ignore --reset-contracts
+        with mock.patch(
+            "demo.serializers.MasterSerializer.Meta.fields",
+            ("id", "name", "alias", "capabilities", "timestamp"),
+        ):
             with pytest.raises(FieldAddedError):
-                self.assertGET(self.url, name='add_field', checks=[FIELDS])
+                self.assertGET(self.url, name="add_field", checks=[FIELDS])
 
     def test_detail(self):
         self.url = reverse("master-detail", args=[self.get_fixture("master").pk])
@@ -74,9 +73,9 @@ class DemoApi(ApiCheckerMixin):
 
 
 class Test1DemoApi(DemoApi, TestCase):
-    def assert_timestamp(self, response, expected, path=''):
-        value = response['timestamp']
-        assert datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
+    def assert_timestamp(self, response, expected, path=""):
+        value = response["timestamp"]
+        assert datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
 
 
 class Test2DemoApi(DemoApi, TestCase):
@@ -94,8 +93,8 @@ class TestUrls(TestCase, metaclass=ApiCheckerBase):
     ]
 
     def get_fixtures(cls):
-        return {'master': MasterFactory(id=101)}
+        return {"master": MasterFactory(id=101)}
 
-    def assert_timestamp(self, response, expected, path=''):
-        value = response['timestamp']
-        assert datetime.datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f')
+    def assert_timestamp(self, response, expected, path=""):
+        value = response["timestamp"]
+        assert datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")

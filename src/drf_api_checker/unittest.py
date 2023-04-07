@@ -28,6 +28,7 @@ class ApiCheckerMixin:
             self.assertGET(url)
 
     """
+
     recorder_class = Recorder
     client_class = APIClient
     expect_errors = False
@@ -39,23 +40,30 @@ class ApiCheckerMixin:
         # self.client = self.client_class() if self.client_class else APIClient()
         self._process_fixtures()
         self.recorder = self.recorder_class(self.data_dir, self)
-        if hasattr(self, 'check_headers'):
-            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
-        if hasattr(self, 'check_status'):
-            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
+        if hasattr(self, "check_headers"):
+            raise DeprecationWarning(
+                "'check_headers' has been deprecated. Use 'checks' instead."
+            )
+        if hasattr(self, "check_status"):
+            raise DeprecationWarning(
+                "'check_status' has been deprecated. Use 'checks' instead."
+            )
 
     @property
     def data_dir(self):
         cls = type(self)
-        return os.path.join(os.path.dirname(inspect.getfile(cls)),
-                            BASE_DATADIR,
-                            cls.__module__, cls.__name__)
+        return os.path.join(
+            os.path.dirname(inspect.getfile(cls)),
+            BASE_DATADIR,
+            cls.__module__,
+            cls.__name__,
+        )
 
-    def get_fixtures_filename(self, basename='fixtures'):
-        return get_filename(self.data_dir, f'{basename}.json')
+    def get_fixtures_filename(self, basename="fixtures"):
+        return get_filename(self.data_dir, f"{basename}.json")
 
     def get_fixtures(self):
-        """ returns test fixtures.
+        """returns test fixtures.
         Should returns a dictionary where any key is a fixture name
         the value should be a Model instance (or a list).
 
@@ -74,76 +82,166 @@ class ApiCheckerMixin:
         return self.__fixtures[name]  # pragma: no cover
 
     def _process_fixtures(self):
-        """ store or retrieve test fixtures """
+        """store or retrieve test fixtures"""
         fname = self.get_fixtures_filename()
-        if os.path.exists(fname) and not os.environ.get('API_CHECKER_RESET'):
+        if os.path.exists(fname) and not os.environ.get("API_CHECKER_RESET"):
             self.__fixtures = load_fixtures(fname)
         else:
             self.__fixtures = self.get_fixtures()
             if self.__fixtures:
                 dump_fixtures(self.__fixtures, fname)
 
-    def _assertCALL(self, url, *, allow_empty=None, checks=None,
-                    expect_errors=None, name=None, method='get', data=None, **kwargs):
-        if 'check_headers' in kwargs:
-            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
-        if 'check_status' in kwargs:
-            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
+    def _assertCALL(
+        self,
+        url,
+        *,
+        allow_empty=None,
+        checks=None,
+        expect_errors=None,
+        name=None,
+        method="get",
+        data=None,
+        **kwargs,
+    ):
+        if "check_headers" in kwargs:
+            raise DeprecationWarning(
+                "'check_headers' has been deprecated. Use 'checks' instead."
+            )
+        if "check_status" in kwargs:
+            raise DeprecationWarning(
+                "'check_status' has been deprecated. Use 'checks' instead."
+            )
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
         expect_errors = self.expect_errors if expect_errors is None else expect_errors
         allow_empty = self.allow_empty if allow_empty is None else allow_empty
-        self.recorder.assertCALL(url, method=method, allow_empty=allow_empty,
-                                 checks=checks,
-                                 expect_errors=expect_errors, name=name, data=data)
+        self.recorder.assertCALL(
+            url,
+            method=method,
+            allow_empty=allow_empty,
+            checks=checks,
+            expect_errors=expect_errors,
+            name=name,
+            data=data,
+        )
 
-    def assertGET(self, url, allow_empty=None, checks=None,
-                  expect_errors=None, name=None, data=None, **kwargs):
-        if 'check_headers' in kwargs:
-            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
-        if 'check_status' in kwargs:
-            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
+    def assertGET(
+        self,
+        url,
+        allow_empty=None,
+        checks=None,
+        expect_errors=None,
+        name=None,
+        data=None,
+        **kwargs,
+    ):
+        if "check_headers" in kwargs:
+            raise DeprecationWarning(
+                "'check_headers' has been deprecated. Use 'checks' instead."
+            )
+        if "check_status" in kwargs:
+            raise DeprecationWarning(
+                "'check_status' has been deprecated. Use 'checks' instead."
+            )
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
-        self._assertCALL(url, method='get', allow_empty=allow_empty,
-                         checks=checks,
-                         expect_errors=expect_errors, name=name, data=data)
+        self._assertCALL(
+            url,
+            method="get",
+            allow_empty=allow_empty,
+            checks=checks,
+            expect_errors=expect_errors,
+            name=name,
+            data=data,
+        )
 
-    def assertPUT(self, url, data, allow_empty=None, checks=None,
-                  expect_errors=None, name=None, **kwargs):
-        if 'check_headers' in kwargs:
-            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
-        if 'check_status' in kwargs:
-            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
+    def assertPUT(
+        self,
+        url,
+        data,
+        allow_empty=None,
+        checks=None,
+        expect_errors=None,
+        name=None,
+        **kwargs,
+    ):
+        if "check_headers" in kwargs:
+            raise DeprecationWarning(
+                "'check_headers' has been deprecated. Use 'checks' instead."
+            )
+        if "check_status" in kwargs:
+            raise DeprecationWarning(
+                "'check_status' has been deprecated. Use 'checks' instead."
+            )
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
-        self._assertCALL(url, method='put', allow_empty=allow_empty,
-                         checks=checks,
-                         expect_errors=expect_errors, name=name, data=data)
+        self._assertCALL(
+            url,
+            method="put",
+            allow_empty=allow_empty,
+            checks=checks,
+            expect_errors=expect_errors,
+            name=name,
+            data=data,
+        )
 
-    def assertPOST(self, url, data, allow_empty=None, checks=None,
-                   expect_errors=None, name=None, **kwargs):
-        if 'check_headers' in kwargs:
-            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
-        if 'check_status' in kwargs:
-            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
+    def assertPOST(
+        self,
+        url,
+        data,
+        allow_empty=None,
+        checks=None,
+        expect_errors=None,
+        name=None,
+        **kwargs,
+    ):
+        if "check_headers" in kwargs:
+            raise DeprecationWarning(
+                "'check_headers' has been deprecated. Use 'checks' instead."
+            )
+        if "check_status" in kwargs:
+            raise DeprecationWarning(
+                "'check_status' has been deprecated. Use 'checks' instead."
+            )
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
-        self._assertCALL(url, data=data, method='post', allow_empty=allow_empty,
-                         checks=checks,
-                         expect_errors=expect_errors, name=name)
+        self._assertCALL(
+            url,
+            data=data,
+            method="post",
+            allow_empty=allow_empty,
+            checks=checks,
+            expect_errors=expect_errors,
+            name=name,
+        )
 
-    def assertDELETE(self, url, allow_empty=None, checks=None,
-                     expect_errors=None, name=None, **kwargs):
-        if 'check_headers' in kwargs:
-            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
-        if 'check_status' in kwargs:
-            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
+    def assertDELETE(
+        self,
+        url,
+        allow_empty=None,
+        checks=None,
+        expect_errors=None,
+        name=None,
+        **kwargs,
+    ):
+        if "check_headers" in kwargs:
+            raise DeprecationWarning(
+                "'check_headers' has been deprecated. Use 'checks' instead."
+            )
+        if "check_status" in kwargs:
+            raise DeprecationWarning(
+                "'check_status' has been deprecated. Use 'checks' instead."
+            )
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
-        self._assertCALL(url, method='delete', allow_empty=allow_empty,
-                         checks=checks,
-                         expect_errors=expect_errors, name=name)
+        self._assertCALL(
+            url,
+            method="delete",
+            allow_empty=allow_empty,
+            checks=checks,
+            expect_errors=expect_errors,
+            name=name,
+        )
 
 
 class ApiCheckerBase(type):
@@ -172,6 +270,7 @@ class ApiCheckerBase(type):
 
 
     """
+
     mixin = ApiCheckerMixin
 
     def __new__(cls, clsname, superclasses, attributedict):
@@ -187,14 +286,15 @@ class ApiCheckerBase(type):
             def _inner(self):
                 self.assertGET(url, data=data)
 
-            _inner.__name__ = "test_url__" + clean_url('get', url, data)
+            _inner.__name__ = "test_url__" + clean_url("get", url, data)
             return _inner
 
-        if 'URLS' not in attributedict:  # pragma: no cover
-            raise ValueError(f"Error creating {clsname}. "
-                             f"ApiCheckerBase requires URLS attribute ")
+        if "URLS" not in attributedict:  # pragma: no cover
+            raise ValueError(
+                f"Error creating {clsname}. " f"ApiCheckerBase requires URLS attribute "
+            )
 
-        for u in attributedict['URLS']:
+        for u in attributedict["URLS"]:
             m = check_url(u)
             if not hasattr(clazz, m.__name__):
                 setattr(clazz, m.__name__, m)

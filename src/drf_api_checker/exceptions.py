@@ -40,8 +40,15 @@ New fields are: `{self.field_names}`"""
 
 
 class FieldValueError(ContractError):
-    def __init__(self, view, field_name, expected, received, filename,
-                 message="Field `{0.field_name}` does not match."):
+    def __init__(
+        self,
+        view,
+        field_name,
+        expected,
+        received,
+        filename,
+        message="Field `{0.field_name}` does not match.",
+    ):
         self.view = view
         self.field_name = field_name
         self.expected = expected

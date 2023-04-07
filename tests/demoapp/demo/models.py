@@ -10,7 +10,7 @@ class Capability(models.Model):
 
     class Meta:
         ordering = ("id",)
-        app_label = 'demo'
+        app_label = "demo"
 
 
 class Master(models.Model):
@@ -22,7 +22,7 @@ class Master(models.Model):
 
     class Meta:
         ordering = ("id",)
-        app_label = 'demo'
+        app_label = "demo"
 
 
 class Detail(models.Model):
@@ -32,4 +32,4 @@ class Detail(models.Model):
 
     class Meta:
         ordering = ("id",)
-        app_label = 'demo'
+        app_label = "demo"

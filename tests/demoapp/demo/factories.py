@@ -1,5 +1,5 @@
 import factory
-from factory import DjangoModelFactory
+from factory.django import DjangoModelFactory
 
 from .models import Capability, Detail, Master
 

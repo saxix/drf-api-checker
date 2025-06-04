@@ -6,22 +6,23 @@ authors = ["sax <s.apostolico@gmail.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.8"
-djangorestframework = "^3.12"
+python = "^3.9"
+djangorestframework = "*"
 pytz = "*"
 Django = "*"
 
-[tool.poetry.dev-dependencies]
-django-webtest = "^1.9"
-factory-boy = "^2.12"
-pyfakefs = "^3.7"
-pytest-cov = "^2.8"
-pytest-django = "^3.7"
-pytest-echo = "^1.6"
-pytest-pythonpath = "^0.7.3"
-pdbpp = "^0.10.2"
-sphinx = "^3.2.1"
-tox-poetry = {extras = ["poetry"], version = "^0.3.0"}
+[tool.poetry.group.dev.dependencies]
+django-webtest = "*"
+factory-boy = "*"
+pyfakefs = "*"
+pytest-cov = "*"
+pytest-django = "*"
+pytest-echo = "*"
+pytest-pythonpath = "*"
+python-dateutil = "*"
+pdbpp = "*"
+sphinx = "*"
+tox-poetry = {extras = ["poetry"], version = "*"}
 
 [build-system]
 requires = ["poetry"]

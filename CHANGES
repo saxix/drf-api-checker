@@ -1,7 +1,7 @@
 Release 0.13 (in development)
 ------------
-* added support to django 4.0
-* added support to python 3.10
+* added support to django 4.2, 5.2, 6.0
+* added support to python 3.11, 3.12, 3.13, 3.14
 
 
 Release 0.12

@@ -6,4 +6,3 @@ PyTest
 ======
 
 pytest  is supported via  :ref:`frozenfixture` and :ref:`contract`
-

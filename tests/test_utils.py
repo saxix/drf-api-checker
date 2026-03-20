@@ -9,8 +9,14 @@ from dateutil.utils import today
 from rest_framework.response import Response
 
 from drf_api_checker.fs import mktree
-from drf_api_checker.utils import (_read, _write, dump_fixtures, load_fixtures,
-                                   load_response, serialize_response)
+from drf_api_checker.utils import (
+    _read,
+    _write,
+    dump_fixtures,
+    load_fixtures,
+    load_response,
+    serialize_response,
+)
 
 
 def test_mktree(tmpdir):
@@ -29,7 +35,7 @@ def test_mktree(tmpdir):
 
     mktree(target2)
     assert os.path.isdir(target2)
-    with pytest.raises(OSError):
+    with pytest.raises(OSError, match=r".*a file with the same name as the desired dir*"):
         mktree(file1)
 
 
@@ -43,7 +49,7 @@ def test_write_buffer():
 
 
 def test_write_error():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=r"'dest' must be a filepath or file-like object. It is <class 'int'>"):
         _write(22, b"content")
 
 
@@ -52,7 +58,7 @@ def test_read_buffer():
 
 
 def test_read_error():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=r"'source' must be a filepath or file-like object. It is <class 'int'>"):
         _read(22)
 
 

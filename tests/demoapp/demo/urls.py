@@ -1,8 +1,13 @@
 from django.contrib import admin
 from django.urls import re_path
 
-from .api import (MasterCreatAPIView, MasterDeleteAPIView, MasterListAPIView,
-                  MasterRetrieveAPIView, MasterUpdateAPIView)
+from .api import (
+    MasterCreatAPIView,
+    MasterDeleteAPIView,
+    MasterListAPIView,
+    MasterRetrieveAPIView,
+    MasterUpdateAPIView,
+)
 
 admin.autodiscover()
 

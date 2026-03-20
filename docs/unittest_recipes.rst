@@ -24,4 +24,3 @@ Check protected url
 -------------------
 
 Using standard DRF way: ``self.client.login()`` or ``self.client.force_authenticate()``
-

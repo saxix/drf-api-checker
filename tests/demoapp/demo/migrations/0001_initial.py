@@ -74,8 +74,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="detail",
             name="master",
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE, to="demo.Master"
-            ),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="demo.Master"),
         ),
     ]

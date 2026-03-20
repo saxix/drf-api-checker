@@ -25,4 +25,3 @@ How to run the tests
 
         $ pip install tox
         $ tox
-

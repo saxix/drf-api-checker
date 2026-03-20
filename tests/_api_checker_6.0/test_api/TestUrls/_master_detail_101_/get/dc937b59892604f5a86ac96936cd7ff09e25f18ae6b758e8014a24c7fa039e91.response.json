@@ -1,0 +1,15 @@
+{
+    "status_code": 200,
+    "headers": {
+        "Content-Type": "application/json",
+        "Vary": "Accept",
+        "Allow": "GET, HEAD, OPTIONS"
+    },
+    "data": {
+        "id": 101,
+        "name": "Name 002",
+        "capabilities": [],
+        "timestamp": "2026-03-24T04:43:56.506053-05:00"
+    },
+    "content_type": "application/json"
+}

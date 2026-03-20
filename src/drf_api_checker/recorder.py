@@ -1,14 +1,18 @@
 import os
 from collections import OrderedDict
 
-from django import VERSION as dj_version
 from django.conf import settings
 from django.urls import resolve
 
-from drf_api_checker.exceptions import (DictKeyAdded, DictKeyMissed,
-                                        FieldAddedError, FieldMissedError,
-                                        FieldValueError, HeaderError,
-                                        StatusCodeError)
+from drf_api_checker.exceptions import (
+    DictKeyAddedError,
+    DictKeyMissedError,
+    FieldAddedError,
+    FieldMissedError,
+    FieldValueError,
+    HeaderError,
+    StatusCodeError,
+)
 from drf_api_checker.fs import clean_url, get_filename
 from drf_api_checker.utils import _write, load_response, serialize_response
 
@@ -16,13 +20,12 @@ HEADERS_TO_CHECK = ["Content-Type", "Content-Length", "Allow"]
 
 
 def get_base_dir():
-    import django
+    import django  # noqa: PLC0415
 
     if hasattr(settings, "BY_DJANGO_VERSION") and settings.BY_DJANGO_VERSION:
         v = ".".join(map(str, django.VERSION[0:2]))
         return f"_api_checker_{v}"
-    else:
-        return "_api_checker"
+    return "_api_checker"
 
 
 BASE_DATADIR = get_base_dir()
@@ -57,20 +60,16 @@ class Recorder:
             HEADERS: self._assert_headers,
         }
         if hasattr(self, "check_headers"):
-            raise DeprecationWarning(
-                "'check_headers' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
         if hasattr(self, "check_status"):
-            raise DeprecationWarning(
-                "'check_status' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
 
     @property
     def client(self):
         if self.owner:
             client = self.owner.client
         else:
-            from rest_framework.test import APIClient
+            from rest_framework.test import APIClient  # noqa: PLC0415
 
             client = APIClient()
 
@@ -79,9 +78,7 @@ class Recorder:
         return client
 
     def get_response_filename(self, method, url, data):
-        return get_filename(
-            self.data_dir, clean_url(method, url, data) + ".response.json"
-        )
+        return get_filename(self.data_dir, clean_url(method, url, data) + ".response.json")
 
     def _get_custom_asserter(self, path, field_name):
         for attr in [f"assert_{path}_{field_name}", f"assert_{field_name}"]:
@@ -90,70 +87,57 @@ class Recorder:
                     return getattr(target, attr)
         return None
 
-    def _compare_dict(
-        self, response, stored, path=None, view="unknown", filename="unknown"
-    ):
+    def _compare_dict(self, response, stored, path=None, view="unknown", filename="unknown"):  # noqa: C901
         try:
             self.check_dict_keys(response, stored)
-        except DictKeyMissed as e:
+        except DictKeyMissedError as e:
             raise FieldMissedError(view, e.keys)
-        except DictKeyAdded as e:
+        except DictKeyAddedError as e:
             raise FieldAddedError(view, e.keys, filename)
         path = path or []
 
         for field_name, field_value in response.items():
             if isinstance(field_value, (dict, OrderedDict)):
                 path.append(field_name)
-                self._compare_dict(
-                    field_value, stored[field_name], path, view=view, filename=filename
-                )
+                self._compare_dict(field_value, stored[field_name], path, view=view, filename=filename)
             else:
                 asserter = self._get_custom_asserter(path, field_name)
                 if asserter:
                     asserter(response, stored, path)
-                else:
-                    if isinstance(field_value, (set, list, tuple)):
-                        safe_field_value = list(field_value)
-                        stored_field_value = stored[field_name]
-                        if len(safe_field_value) != len(stored_field_value):
-                            raise FieldValueError(
+                elif isinstance(field_value, (set, list, tuple)):
+                    safe_field_value = list(field_value)
+                    stored_field_value = stored[field_name]
+                    if len(safe_field_value) != len(stored_field_value):
+                        raise FieldValueError(
+                            view=view,
+                            message="Field len `{0.field_name}` does not match.",
+                            expected=stored_field_value,
+                            received=safe_field_value,
+                            field_name=field_name,
+                            filename=self.fixture_file,
+                        )
+
+                    for i, entry in enumerate(safe_field_value):
+                        if isinstance(entry, (dict, OrderedDict)):
+                            path.append("%s[%s]" % (field_name, i))
+                            self._compare_dict(
+                                dict(entry),
+                                stored_field_value[i],
+                                path,
                                 view=view,
-                                message="Field len `{0.field_name}` does not match.",
-                                expected=stored_field_value,
-                                received=safe_field_value,
-                                field_name=field_name,
                                 filename=self.fixture_file,
                             )
 
-                        for i, entry in enumerate(safe_field_value):
-                            if isinstance(entry, (dict, OrderedDict)):
-                                entry = dict(entry)
-                                path.append("%s[%s]" % (field_name, i))
-                                self._compare_dict(
-                                    entry,
-                                    stored_field_value[i],
-                                    path,
-                                    view=view,
-                                    filename=self.fixture_file,
-                                )
-
-                            # if entry != stored_field_value[i]:
-                            #     raise FieldValueError(view=view,
-                            #                           expected=stored_field_value[i],
-                            #                           received=entry,
-                            #                           field_name='%s[%s]' % (field_name, i),
-                            #                           filename=self.data_dir)
-
-                    elif field_name in stored and field_value != stored[field_name]:
-                        path.append(field_name)
-                        full_path_to_field = ".".join(path)
-                        raise FieldValueError(
-                            view=view,
-                            expected=stored[field_name],
-                            received=response[field_name],
-                            field_name=full_path_to_field,
-                            filename=self.fixture_file,
-                        )
+                elif field_name in stored and field_value != stored[field_name]:
+                    path.append(field_name)
+                    full_path_to_field = ".".join(path)
+                    raise FieldValueError(
+                        view=view,
+                        expected=stored[field_name],
+                        received=field_value,
+                        field_name=full_path_to_field,
+                        filename=self.fixture_file,
+                    )
 
     def get_single_record(self, response, expected):
         if isinstance(response, (list, tuple)):
@@ -168,13 +152,11 @@ class Recorder:
         missed = _expct.difference(_recv)
 
         if missed:
-            raise DictKeyMissed(", ".join(missed))
+            raise DictKeyMissedError(", ".join(missed))
         if added:
-            raise DictKeyAdded(", ".join(added))
+            raise DictKeyAddedError(", ".join(added))
 
-    def compare(
-        self, response, expected, filename="unknown", ignore_fields=None, view="unknown"
-    ):
+    def compare(self, response, expected, filename="unknown", ignore_fields=None, view="unknown"):
         if response:
             if isinstance(response, (list, tuple)):
                 a = response[0]
@@ -184,18 +166,18 @@ class Recorder:
                 b = expected
             try:
                 self.check_dict_keys(a, b)
-            except DictKeyMissed as e:
+            except DictKeyMissedError as e:
                 raise FieldMissedError(view, e.keys)
-            except DictKeyAdded as e:
+            except DictKeyAddedError as e:
                 raise FieldAddedError(view, e.keys, filename)
 
             response, expected = self.get_single_record(response, expected)
             self._compare_dict(response, expected, view=view, filename=filename)
-        else:
-            assert response == expected
+        elif response != expected:
+            raise AssertionError(f"Expected {expected}, got {response}")
         return True
 
-    def assertGET(
+    def assertGET(  # noqa: PLR0913 N802
         self,
         url,
         *,
@@ -207,13 +189,9 @@ class Recorder:
         **kwargs,
     ):
         if "check_headers" in kwargs:
-            raise DeprecationWarning(
-                "'check_headers' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
         if "check_status" in kwargs:
-            raise DeprecationWarning(
-                "'check_status' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
         return self.assertCALL(
@@ -225,7 +203,7 @@ class Recorder:
             data=data,
         )
 
-    def assertPUT(
+    def assertPUT(  # noqa: PLR0913 N802
         self,
         url,
         data,
@@ -237,13 +215,9 @@ class Recorder:
         **kwargs,
     ):
         if "check_headers" in kwargs:
-            raise DeprecationWarning(
-                "'check_headers' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
         if "check_status" in kwargs:
-            raise DeprecationWarning(
-                "'check_status' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
         return self.assertCALL(
@@ -256,7 +230,7 @@ class Recorder:
             name=name,
         )
 
-    def assertPOST(
+    def assertPOST(  # noqa: PLR0913 N802
         self,
         url,
         data,
@@ -270,13 +244,9 @@ class Recorder:
         **kwargs,
     ):
         if "check_headers" in kwargs:
-            raise DeprecationWarning(
-                "'check_headers' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
         if "check_status" in kwargs:
-            raise DeprecationWarning(
-                "'check_status' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
         return self.assertCALL(
@@ -289,7 +259,7 @@ class Recorder:
             name=name,
         )
 
-    def assertDELETE(
+    def assertDELETE(  # noqa: PLR0913 N802
         self,
         url,
         *,
@@ -301,13 +271,9 @@ class Recorder:
         **kwargs,
     ):
         if "check_headers" in kwargs:
-            raise DeprecationWarning(
-                "'check_headers' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
         if "check_status" in kwargs:
-            raise DeprecationWarning(
-                "'check_status' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
         return self.assertCALL(
@@ -320,7 +286,7 @@ class Recorder:
             data=data,
         )
 
-    def assertCALL(
+    def assertCALL(  # noqa: PLR0913 N802
         self,
         url,
         *,
@@ -332,8 +298,7 @@ class Recorder:
         checks=None,
         **kwargs,
     ):
-        """
-        check url for response changes
+        """Check url for response changes.
 
         :param url: url to check
         :param allow_empty: if True ignore empty response and 404 errors
@@ -343,13 +308,9 @@ class Recorder:
         :raises: AssertionError
         """
         if "check_headers" in kwargs:
-            raise DeprecationWarning(
-                "'check_headers' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
         if "check_status" in kwargs:
-            raise DeprecationWarning(
-                "'check_status' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
 
@@ -360,26 +321,17 @@ class Recorder:
         m = getattr(self.client, method.lower())
         self.filename = self.get_response_filename(method, name or url, data)
         response = m(url, data=data)
-        assert response.accepted_renderer
         payload = response.data
         if not allow_empty and not payload:
-            raise ValueError(
-                f"View {self.view} returned and empty json. Check your test"
-            )
+            raise ValueError(f"View {self.view} returned and empty json. Check your test")
 
         if response.status_code > 299 and not expect_errors:
-            raise ValueError(
-                f"View {self.view} unexpected response. {response.status_code} - {response.content}"
-            )
+            raise ValueError(f"View {self.view} unexpected response. {response.status_code} - {response.content}")
 
         if not allow_empty and response.status_code == 404:
-            raise ValueError(
-                f"View {self.view} returned 404 status code. Check your test"
-            )
+            raise ValueError(f"View {self.view} returned 404 status code. Check your test")
 
-        if not os.path.exists(self.filename) or os.environ.get(
-            "API_CHECKER_RESET", False
-        ):
+        if not os.path.exists(self.filename) or os.environ.get("API_CHECKER_RESET", "false"):
             _write(self.filename, serialize_response(response))
 
         stored = load_response(self.filename)
@@ -399,8 +351,7 @@ class Recorder:
 
     def _assert_headers(self, response, stored):
         for header in self.headers_to_check:
-            stored_headers = stored if dj_version < (3, 2) else stored.headers
-            _expected = stored_headers.get(header)
+            _expected = stored.headers.get(header)
             _recv = response.get(header)
             if _expected != _recv:
                 raise HeaderError(
@@ -411,12 +362,3 @@ class Recorder:
                     self.filename,
                     f"{stored.content}/{response.content}",
                 )
-
-        # if sorted(response.get('Allow')) != sorted(stored.get('Allow')):
-        #     raise HeaderError(self.view, h, stored.get(h),
-        #                       response.get(h),
-        #                       self.filename)
-        #
-        # assert response.get('Content-Type') == stored.get('Content-Type')
-        # assert response.get('Content-Length') == stored.get('Content-Length'), response.content
-        # assert sorted(response.get('Allow')) == sorted(stored.get('Allow'))

@@ -5,7 +5,7 @@ class ContractError(AssertionError):
     pass
 
 
-class DictKeyMissed(ContractError):
+class DictKeyMissedError(ContractError):
     def __init__(self, keys):
         self.keys = keys
 
@@ -13,7 +13,7 @@ class DictKeyMissed(ContractError):
         return f"Missing fields: `{self.keys}` "
 
 
-class DictKeyAdded(ContractError):
+class DictKeyAddedError(ContractError):
     def __init__(self, keys):
         self.keys = keys
 
@@ -40,7 +40,7 @@ New fields are: `{self.field_names}`"""
 
 
 class FieldValueError(ContractError):
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         view,
         field_name,
@@ -65,7 +65,7 @@ Datadir: {self.filename}
 
 
 class HeaderError(ContractError):
-    def __init__(self, view, header, expected, received, filename, extra=""):
+    def __init__(self, view, header, expected, received, filename, extra=""):  # noqa: PLR0913
         self.view = view
         self.field_name = header
         self.expected = expected

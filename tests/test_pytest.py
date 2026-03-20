@@ -1,8 +1,11 @@
 import pytest
 from django.urls import reverse
 
-from drf_api_checker.pytest import (api_checker_datadir, contract,  # noqa
-                                    frozenfixture)
+from drf_api_checker.pytest import (  # noqa
+    api_checker_datadir,
+    contract,
+    frozenfixture,
+)
 from drf_api_checker.recorder import Recorder
 
 
@@ -13,19 +16,18 @@ class MyRecorder(Recorder):
 
 @frozenfixture()
 def frozen_detail(request, db):
-    from demo.factories import DetailFactory
+    from demo.factories import DetailFactory  # noqa
 
     return DetailFactory()
 
 
 @contract(recorder_class=MyRecorder)
 def test_url_get(frozen_detail):
-    url = reverse("master-list")
-    return url
+    return reverse("master-list")
 
 
 @pytest.mark.parametrize("method", ["get", "options"])
-def test_parametrize(frozen_detail, api_checker_datadir, method):
+def test_parametrize(frozen_detail, api_checker_datadir, method):  # noqa
     url = reverse("master-list")
     recorder = MyRecorder(api_checker_datadir)
     recorder.assertCALL(url, method=method)
@@ -39,5 +41,4 @@ def test_url_post(frozen_detail):
 
 @contract(recorder_class=MyRecorder, method="delete", allow_empty=True)
 def test_url_delete(frozen_detail):
-    url = reverse("master-delete", args=[frozen_detail.pk])
-    return url
+    return reverse("master-delete", args=[frozen_detail.pk])

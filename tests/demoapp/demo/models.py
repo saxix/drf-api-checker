@@ -12,6 +12,9 @@ class Capability(models.Model):
         ordering = ("id",)
         app_label = "demo"
 
+    def __str__(self):
+        return self.name
+
 
 class Master(models.Model):
     name = models.CharField(max_length=100)
@@ -24,6 +27,9 @@ class Master(models.Model):
         ordering = ("id",)
         app_label = "demo"
 
+    def __str__(self):
+        return self.name
+
 
 class Detail(models.Model):
     name = models.CharField(max_length=100)
@@ -33,3 +39,6 @@ class Detail(models.Model):
     class Meta:
         ordering = ("id",)
         app_label = "demo"
+
+    def __str__(self):
+        return self.name

@@ -32,7 +32,7 @@ def configure_env(request):
         os.environ["API_CHECKER_RESET"] = "1"
 
 
-@pytest.fixture()
+@pytest.fixture
 def api_checker_datadir(request):
     return get_data_dir(request.function)
 
@@ -43,8 +43,8 @@ def default_fixture_name(seed, request):
 
 def frozenfixture(fixture_name=default_fixture_name):
     def deco(func):
-        from drf_api_checker.fs import mktree
-        from drf_api_checker.utils import dump_fixtures, load_fixtures
+        from drf_api_checker.fs import mktree  # noqa: PLC0415
+        from drf_api_checker.utils import dump_fixtures, load_fixtures  # noqa: PLC0415
 
         @wraps(func)
         def _inner(*args, **kwargs):
@@ -57,14 +57,6 @@ def frozenfixture(fixture_name=default_fixture_name):
                 func.__module__,
                 func.__name__,
             ]
-            # for x in (fixture_names or []):
-            #     if callable(x):
-            #         part = x(request)
-            #     else:
-            #         part = request.getfixturevalue(x)
-            #     parts.append(part.__name__)
-            #
-            # destination = os.path.join(*parts) + '.fixture.json'
             seed = os.path.join(*parts)
             destination = fixture_name(seed, request)
 
@@ -88,14 +80,14 @@ def get_data_dir(func):
     )
 
 
-def contract(
+def contract(  # noqa: PLR0913
     recorder_class=Recorder,
     allow_empty=False,
     name=None,
     method="get",
     checks=None,
     debug=False,
-    **kwargs
+    **kwargs,
 ):
     if kwargs:
         raise AttributeError("Unknown arguments %s" % ",".join(kwargs.keys()))

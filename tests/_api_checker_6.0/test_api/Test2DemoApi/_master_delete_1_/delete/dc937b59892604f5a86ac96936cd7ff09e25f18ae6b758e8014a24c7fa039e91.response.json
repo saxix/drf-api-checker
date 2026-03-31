@@ -1,0 +1,9 @@
+{
+    "status_code": 204,
+    "headers": {
+        "Vary": "Accept",
+        "Allow": "DELETE, OPTIONS"
+    },
+    "data": null,
+    "content_type": null
+}

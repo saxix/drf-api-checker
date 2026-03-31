@@ -12,39 +12,38 @@ def pytest_configure(config):
 
 @pytest.fixture(scope="session")
 def client(request):
-    import django_webtest
+    import django_webtest  # noqa
 
     wtm = django_webtest.WebTestMixin()
     wtm.csrf_checks = False
     wtm._patch_settings()
-    request.addfinalizer(wtm._unpatch_settings)
-    app = django_webtest.DjangoTestApp()
-    return app
+    request.addfinalizer(wtm._unpatch_settings)  # noqa
+    return django_webtest.DjangoTestApp()
 
 
 @pytest.fixture
 def master(db):
-    from demo.factories import MasterFactory
+    from demo.factories import MasterFactory  # noqa
 
     return MasterFactory()
 
 
 @pytest.fixture
 def detail(master):
-    from demo.factories import DetailFactory
+    from demo.factories import DetailFactory  # noqa
 
     return DetailFactory(master=master)
 
 
 @pytest.fixture
 def masters(db):
-    from demo.factories import MasterFactory
+    from demo.factories import MasterFactory  # noqa
 
     return MasterFactory(), MasterFactory()
 
 
 @pytest.fixture
 def details(db):
-    from demo.factories import DetailFactory
+    from demo.factories import DetailFactory  # noqa
 
     return DetailFactory(), DetailFactory()

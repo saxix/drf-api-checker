@@ -1,29 +1,49 @@
-[tool.poetry]
+[build-system]
+build-backend = "hatchling.build"
+requires = [
+  "hatch-vcs>=0.4",
+  "hatchling>=1.25",
+]
+
+[project]
 name = "drf-api-checker"
 version = "0.13"
 description = ""
-authors = ["sax <s.apostolico@gmail.com>"]
 license = "MIT"
+authors = [
+  { name = "sax", email = "s.apostolico@gmail.com" },
+]
+requires-python = ">=3.12"
+classifiers = [
+  "Environment :: Web Environment",
+  "Framework :: Django",
+  "Framework :: Django :: 4.2",
+  "Framework :: Django :: 5.2",
+  "Framework :: Django :: 6.0",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+  "django",
+  "djangorestframework",
+  "pytz",
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-djangorestframework = "*"
-pytz = "*"
-Django = "*"
-
-[tool.poetry.group.dev.dependencies]
-django-webtest = "*"
-factory-boy = "*"
-pyfakefs = "*"
-pytest-cov = "*"
-pytest-django = "*"
-pytest-echo = "*"
-pytest-pythonpath = "*"
-python-dateutil = "*"
-pdbpp = "*"
-sphinx = "*"
-tox-poetry = {extras = ["poetry"], version = "*"}
-
-[build-system]
-requires = ["poetry"]
-build-backend = "poetry.masonry.api"
+[dependency-groups]
+dev = [
+  "django-webtest",
+  "factory-boy",
+  "pdbpp",
+  "pre-commit",
+  "pyfakefs",
+  "pytest",
+  "pytest-cov",
+  "pytest-django",
+  "pytest-echo",
+  "python-dateutil",
+  "sphinx",
+  "tox",
+]

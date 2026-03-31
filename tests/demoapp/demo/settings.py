@@ -59,11 +59,7 @@ TEMPLATES = [
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-    "formatters": {
-        "debug": {
-            "format": "%(levelno)s:%(levelname)-8s %(name)s %(funcName)s:%(lineno)s:: %(message)s"
-        }
-    },
+    "formatters": {"debug": {"format": "%(levelno)s:%(levelname)-8s %(name)s %(funcName)s:%(lineno)s:: %(message)s"}},
     "handlers": {
         "null": {"level": "DEBUG", "class": "logging.NullHandler"},
         "console": {
@@ -72,9 +68,7 @@ LOGGING = {
             "formatter": "debug",
         },
     },
-    "loggers": {
-        "drf_api_checker": {"handlers": ["null"], "propagate": False, "level": "DEBUG"}
-    },
+    "loggers": {"drf_api_checker": {"handlers": ["null"], "propagate": False, "level": "DEBUG"}},
 }
 
 DATABASES = {

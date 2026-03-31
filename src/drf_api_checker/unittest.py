@@ -9,8 +9,7 @@ from drf_api_checker.utils import dump_fixtures, load_fixtures
 
 
 class ApiCheckerMixin:
-    """
-    Mixin to enable API contract check
+    """Mixin to enable API contract check.
 
     How to use it:
 
@@ -18,7 +17,6 @@ class ApiCheckerMixin:
     - use self.assert<METHOD>(url) to check urls contract
 
     Example:
-
     class TestAPIAgreements(ApiCheckerMixin, TestCase):
         def get_fixtures(self):
             return {'customer': CustomerFactory()}
@@ -37,17 +35,12 @@ class ApiCheckerMixin:
 
     def setUp(self):
         super().setUp()
-        # self.client = self.client_class() if self.client_class else APIClient()
         self._process_fixtures()
         self.recorder = self.recorder_class(self.data_dir, self)
         if hasattr(self, "check_headers"):
-            raise DeprecationWarning(
-                "'check_headers' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
         if hasattr(self, "check_status"):
-            raise DeprecationWarning(
-                "'check_status' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
 
     @property
     def data_dir(self):
@@ -63,7 +56,8 @@ class ApiCheckerMixin:
         return get_filename(self.data_dir, f"{basename}.json")
 
     def get_fixtures(self):
-        """returns test fixtures.
+        """Return test fixtures.
+
         Should returns a dictionary where any key is a fixture name
         the value should be a Model instance (or a list).
 
@@ -76,13 +70,11 @@ class ApiCheckerMixin:
         return {}  # pragma: no cover
 
     def get_fixture(self, name):
-        """
-        returns fixture `name` loaded by `get_fixtures()`
-        """
+        """Return fixture `name` loaded by `get_fixtures()`."""
         return self.__fixtures[name]  # pragma: no cover
 
     def _process_fixtures(self):
-        """store or retrieve test fixtures"""
+        """Store or retrieve test fixtures."""
         fname = self.get_fixtures_filename()
         if os.path.exists(fname) and not os.environ.get("API_CHECKER_RESET"):
             self.__fixtures = load_fixtures(fname)
@@ -91,7 +83,7 @@ class ApiCheckerMixin:
             if self.__fixtures:
                 dump_fixtures(self.__fixtures, fname)
 
-    def _assertCALL(
+    def _assertCALL(  # noqa: PLR0913 N802
         self,
         url,
         *,
@@ -104,13 +96,9 @@ class ApiCheckerMixin:
         **kwargs,
     ):
         if "check_headers" in kwargs:
-            raise DeprecationWarning(
-                "'check_headers' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
         if "check_status" in kwargs:
-            raise DeprecationWarning(
-                "'check_status' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
         expect_errors = self.expect_errors if expect_errors is None else expect_errors
@@ -125,7 +113,7 @@ class ApiCheckerMixin:
             data=data,
         )
 
-    def assertGET(
+    def assertGET(  # noqa: PLR0913 N802
         self,
         url,
         allow_empty=None,
@@ -136,13 +124,9 @@ class ApiCheckerMixin:
         **kwargs,
     ):
         if "check_headers" in kwargs:
-            raise DeprecationWarning(
-                "'check_headers' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
         if "check_status" in kwargs:
-            raise DeprecationWarning(
-                "'check_status' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
         self._assertCALL(
@@ -155,7 +139,7 @@ class ApiCheckerMixin:
             data=data,
         )
 
-    def assertPUT(
+    def assertPUT(  # noqa: PLR0913 N802
         self,
         url,
         data,
@@ -166,13 +150,9 @@ class ApiCheckerMixin:
         **kwargs,
     ):
         if "check_headers" in kwargs:
-            raise DeprecationWarning(
-                "'check_headers' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
         if "check_status" in kwargs:
-            raise DeprecationWarning(
-                "'check_status' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
         self._assertCALL(
@@ -185,7 +165,7 @@ class ApiCheckerMixin:
             data=data,
         )
 
-    def assertPOST(
+    def assertPOST(  # noqa: PLR0913 N802
         self,
         url,
         data,
@@ -196,13 +176,9 @@ class ApiCheckerMixin:
         **kwargs,
     ):
         if "check_headers" in kwargs:
-            raise DeprecationWarning(
-                "'check_headers' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
         if "check_status" in kwargs:
-            raise DeprecationWarning(
-                "'check_status' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
         self._assertCALL(
@@ -215,7 +191,7 @@ class ApiCheckerMixin:
             name=name,
         )
 
-    def assertDELETE(
+    def assertDELETE(  # noqa: N802
         self,
         url,
         allow_empty=None,
@@ -225,13 +201,9 @@ class ApiCheckerMixin:
         **kwargs,
     ):
         if "check_headers" in kwargs:
-            raise DeprecationWarning(
-                "'check_headers' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_headers' has been deprecated. Use 'checks' instead.")
         if "check_status" in kwargs:
-            raise DeprecationWarning(
-                "'check_status' has been deprecated. Use 'checks' instead."
-            )
+            raise DeprecationWarning("'check_status' has been deprecated. Use 'checks' instead.")
         if kwargs:
             raise AttributeError("Unknown arguments %s" % kwargs.keys())
         self._assertCALL(
@@ -245,8 +217,8 @@ class ApiCheckerMixin:
 
 
 class ApiCheckerBase(type):
-    """
-    Custom _type_, intended to be used as metaclass.
+    """Custom _type_, intended to be used as metaclass.
+
     It will create a test for each url defined in URLS in the format
     ``test__<normalized_url_path>``,  if a method with the same name is found the
     creation is skipped reading this as an intention to have a custom test for that url.
@@ -290,9 +262,7 @@ class ApiCheckerBase(type):
             return _inner
 
         if "URLS" not in attributedict:  # pragma: no cover
-            raise ValueError(
-                f"Error creating {clsname}. " f"ApiCheckerBase requires URLS attribute "
-            )
+            raise ValueError(f"Error creating {clsname}. ApiCheckerBase requires URLS attribute ")
 
         for u in attributedict["URLS"]:
             m = check_url(u)

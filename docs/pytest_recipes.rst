@@ -114,4 +114,3 @@ Authenticate client with different users
         with user_grant_permissions(user, [permission])
             recorder = MyRecorder(api_checker_datadir, as_user=user):
             recorder.assertCALL(url, method=method)
-

@@ -1,34 +1,29 @@
-exclude: '^$'
-fail_fast: false
 repos:
--   repo: local
-    hooks:
-      - id: isort
-        args:
-            - --check-only
-            - -rc
-            - src/
-            - tests/
-        exclude: docs/
-        name: isort
-        entry: isort
-        language: system
-        types: [python]
-
--   repo: git://github.com/pre-commit/pre-commit-hooks
-    rev: v1.4.0
-    hooks:
-    -   id: debug-statements
-    -   id: flake8
-        exclude: docs/
-        args:
-        - src/
-        - tests/
-    -   id: check-merge-conflict
--   repo: https://github.com/saxix/pch.git
-    rev: 0b3bfbc75c2e27b5ff78f0a92642ef100de1c5a2
-    hooks:
-    -   id: check-untracked
-        args:
-            - src
-            - tests
+    -   repo: https://github.com/pre-commit/pre-commit-hooks
+        rev: v6.0.0
+        hooks:
+          - id: end-of-file-fixer
+          - id: trailing-whitespace
+    -   repo: https://github.com/python-jsonschema/check-jsonschema
+        rev: 0.37.0
+        hooks:
+            -   id: check-github-workflows
+                args: [ "--verbose" ]
+    -   repo: https://github.com/tox-dev/tox-ini-fmt
+        rev: "1.7.1"
+        hooks:
+            -   id: tox-ini-fmt
+                args: [ "-p", "lint" ]
+    -   repo: https://github.com/tox-dev/pyproject-fmt
+        rev: "v2.20.0"
+        hooks:
+            -   id: pyproject-fmt
+    - repo: https://github.com/astral-sh/ruff-pre-commit
+      rev: v0.15.7
+      hooks:
+          - id: ruff
+          - id: ruff-format
+            args:
+                - --check
+                - --config
+                - ruff.toml

@@ -9,7 +9,6 @@ class CapabilityFactory(DjangoModelFactory):
 
     class Meta:
         model = Capability
-        # django_get_or_create = ('id',)
 
 
 class MasterFactory(DjangoModelFactory):
@@ -18,7 +17,6 @@ class MasterFactory(DjangoModelFactory):
 
     class Meta:
         model = Master
-        # django_get_or_create = ('id',)
 
     @factory.post_generation
     def capabilities(self, create, extracted, **kwargs):
@@ -36,4 +34,3 @@ class DetailFactory(DjangoModelFactory):
 
     class Meta:
         model = Detail
-        # django_get_or_create = ('id',)

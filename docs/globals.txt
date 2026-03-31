@@ -9,4 +9,3 @@
 
 .. |pkg| replace:: **drf-api-checker**
 .. |version| replace:: 0.1
-

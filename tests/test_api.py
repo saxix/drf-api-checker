@@ -18,7 +18,7 @@ class MyRecorder(Recorder):
     def assert_timestamp(self, response: Response, stored: Response, path: str):
         # only check datetime format
         value = response["timestamp"]
-        assert datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+        assert datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f%z")
 
 
 class DemoApi(ApiCheckerMixin):
@@ -82,7 +82,6 @@ class Test2DemoApi(DemoApi, TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        # cls.data_dir = tempfile.mkdtemp()
         cls.recorder = Recorder(cls.data_dir, cls)
 
 
@@ -92,9 +91,10 @@ class TestUrls(TestCase, metaclass=ApiCheckerBase):
         reverse("master-detail", args=[101]),
     ]
 
+    @classmethod
     def get_fixtures(cls):
         return {"master": MasterFactory(id=101)}
 
     def assert_timestamp(self, response, expected, path=""):
         value = response["timestamp"]
-        assert datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+        assert datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f%z")

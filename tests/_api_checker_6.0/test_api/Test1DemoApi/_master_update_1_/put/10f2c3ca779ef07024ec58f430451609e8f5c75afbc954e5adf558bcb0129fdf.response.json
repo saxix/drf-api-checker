@@ -1,0 +1,15 @@
+{
+    "status_code": 200,
+    "headers": {
+        "Content-Type": "application/json",
+        "Vary": "Accept",
+        "Allow": "PUT, PATCH, OPTIONS"
+    },
+    "data": {
+        "id": 1,
+        "name": "abc",
+        "capabilities": [],
+        "timestamp": "2026-03-24T04:44:59.270656-05:00"
+    },
+    "content_type": "application/json"
+}

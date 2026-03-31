@@ -1,0 +1,51 @@
+{
+    "status_code": 200,
+    "headers": {
+        "Content-Type": "application/json",
+        "Vary": "Accept",
+        "Allow": "GET, POST, HEAD, OPTIONS"
+    },
+    "data": {
+        "name": "Master List Api",
+        "description": "",
+        "renders": [
+            "application/json",
+            "text/html"
+        ],
+        "parses": [
+            "application/json",
+            "application/x-www-form-urlencoded",
+            "multipart/form-data"
+        ],
+        "actions": {
+            "POST": {
+                "id": {
+                    "type": "integer",
+                    "required": false,
+                    "read_only": true,
+                    "label": "ID"
+                },
+                "name": {
+                    "type": "string",
+                    "required": true,
+                    "read_only": false,
+                    "label": "Name",
+                    "max_length": 100
+                },
+                "capabilities": {
+                    "type": "field",
+                    "required": false,
+                    "read_only": false,
+                    "label": "Capabilities"
+                },
+                "timestamp": {
+                    "type": "datetime",
+                    "required": false,
+                    "read_only": true,
+                    "label": "Timestamp"
+                }
+            }
+        }
+    },
+    "content_type": "application/json"
+}
